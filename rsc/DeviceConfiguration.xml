@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DeviceList>
+  <Device>
+    <Id>Abcd1234</Id>
+    <HostIp>192.168.1.100</HostIp>
+    <Group>1</Group>
+    <Protokoll>xml</Protokoll>
+  </Device>
+<Device>
+    <Id>Abcd5678</Id>
+    <HostIp>192.168.1.100</HostIp>
+    <Group>1</Group>
+    <Protokoll>xml</Protokoll>
+  </Device>
+</DeviceList>
