@@ -1,0 +1,25 @@
+@import com.fasterxml.jackson.databind.JsonNode
+@import model.Device
+@(devices: List[Device])
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Device-Liste</title>
+    </head>
+    <body>
+        <h1>Device-Liste</h1>
+
+        <ul>
+        @for( device <- devices) {
+            <li>@device.getId @device.getHostIp @device.getDataSource @device.getGroup @device.getProtocol</li>
+        }
+        </ul>
+        <table border='1'>
+        <tr><th>Id</th><th>HostIp</th><th>DataSource</th><th>Group</th><th>Protocol</th> </tr>
+        @for( device <- devices) {
+            <tr><td>@device.getId</td><td>@device.getHostIp</td><td>@device.getDataSource</td><td>@device.getGroup</td><td>@device.getProtocol</td></tr>
+        }
+        </table>
+    </body>
+</html>

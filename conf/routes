@@ -1,6 +1,9 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
+# Routing Devices
+
+# Gibt eine List<Device> aller konfigurierten Devices
+GET     /list                       controllers.DeviceController.list
+# Gibt eine JasonNode aller konfigurierten Devices
+GET     /listJson                   controllers.DeviceController.listJson
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
