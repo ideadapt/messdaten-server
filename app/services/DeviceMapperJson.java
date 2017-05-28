@@ -25,7 +25,7 @@ public class DeviceMapperJson {
      *
      * @return
      */
-    public static List<Device> getDeviceListJson() {
+    public static List<Device> getDeviceListFromConfig() {
         ObjectMapper objectMapper = new ObjectMapper();
         TypeReference<List<Device>> listType = new TypeReference<List<Device>>(){};
         List<Device>devices = null;
@@ -36,6 +36,30 @@ public class DeviceMapperJson {
             e.printStackTrace();
         }
         return devices;
+    }
+
+    /**
+     * Fuegt der List<Device> einen neuen Device hinzu, falls dieser valid ist.
+     * Mapped die Liste ins Json-Config-File
+     *
+     * Wirft eine IOException falls das Config-File nicht erstellt werden konnte
+     *
+     * @param newDevice
+     * @return
+     */
+    public static Device addDeviceToConfig(Device newDevice){
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Device>devices = getDeviceListFromConfig();
+
+        if(DeviceValidator.validateDevice(devices,newDevice)){
+            devices.add(newDevice);
+        }
+        try {
+            objectMapper.writeValue(new File("c:\\temp\\DeviceConfiguration.json"), devices);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return newDevice;
     }
 
     /**

@@ -4,6 +4,8 @@
 GET     /list                       controllers.DeviceController.list
 # Gibt eine JasonNode aller konfigurierten Devices
 GET     /listJson                   controllers.DeviceController.listJson
+# Legt einen neuen Device an
+POST    /device/new                 controllers.DeviceController.newDevice
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
