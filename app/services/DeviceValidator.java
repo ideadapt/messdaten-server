@@ -23,6 +23,24 @@ public class DeviceValidator {
     }
 
     /**
+     * Prueft ob alle Bedingungen fuer ein Update des Devices in der Konfiguration erfuellt sind
+     *
+     * @param devices
+     * @param newDevice
+     * @return
+     */
+    public static boolean isValidForUpdate(List<Device>devices,Device newDevice){
+
+        if(!hasRequieredMembers(newDevice)){
+            return false;
+        }
+        if(isIdUnique(devices,newDevice)){
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Prueft ob der neue Device alle Plicht-Eigenschaften beinhaltet
      *
      * @param newDevice

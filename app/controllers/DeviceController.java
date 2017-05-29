@@ -75,4 +75,23 @@ public class DeviceController extends Controller {
         return promiseOfResult;
     }
 
+    /**
+     * Aktualisiert einen Device in der Konfiguration
+     *
+     * @return
+     */
+    @BodyParser.Of(BodyParser.Json.class)
+    public CompletionStage<Result> updateDevice(){
+        JsonNode json = request().body().asJson();
+        Device newDevice = Json.fromJson(json,Device.class);
+
+        CompletionStage<Device> promiseOfDevice = CompletableFuture.
+                supplyAsync(() -> DeviceMapperJson.updateDeviceInConfig(newDevice));
+
+        CompletionStage<Result> promiseOfResult = promiseOfDevice.
+                thenApply(device -> ok(Json.toJson(device)));
+
+        return promiseOfResult;
+    }
+
 }

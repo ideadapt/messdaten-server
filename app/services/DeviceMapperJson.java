@@ -63,6 +63,36 @@ public class DeviceMapperJson {
     }
 
     /**
+     * Aktualisiert einen Device in der Konfiguration
+     *
+     * Wirft eine IOException falls das Config-File nicht erstellt werden konnte
+     *
+     * @param updDevice
+     * @return
+     */
+    public static Device updateDeviceInConfig(Device updDevice){
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Device>devices = getDeviceListFromConfig();
+
+        if(DeviceValidator.isValidForUpdate(devices,updDevice)){
+            for(Device device : devices){
+                if(device.getId().equals(updDevice.getId())){
+                    device.setHostIp(updDevice.getHostIp());
+                    device.setDataSource(updDevice.getDataSource());
+                    device.setGroup(updDevice.getGroup());
+                    device.setProtocol(updDevice.getProtocol());
+                }
+            }
+        }
+        try {
+            objectMapper.writeValue(new File("c:\\temp\\DeviceConfiguration.json"), devices);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return updDevice;
+    }
+
+    /**
      * Parsed das File DeviceConfiguration.json in eine JsonNode und gibt diese zurueck
      * Wirft eine IOException wenn die Liste nicht erstellt werden konnte
      *

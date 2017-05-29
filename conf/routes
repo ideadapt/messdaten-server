@@ -6,6 +6,8 @@ GET     /list                       controllers.DeviceController.list
 GET     /listJson                   controllers.DeviceController.listJson
 # Legt einen neuen Device an
 POST    /device/new                 controllers.DeviceController.newDevice
+# Aktualisiert einen Device
+POST    /device/update              controllers.DeviceController.updateDevice
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
