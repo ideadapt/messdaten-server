@@ -43,4 +43,20 @@ public class Device {
     public String getProtocol() {
         return protocol;
     }
+
+    public void setHostIp(String hostIp) {
+        this.hostIp = hostIp;
+    }
+
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public void setGroup(int group) {
+        this.group = group;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
 }
