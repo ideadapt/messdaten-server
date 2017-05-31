@@ -1,15 +1,17 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.google.inject.Inject;
 import model.Device;
-
+import play.data.Form;
+import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.DeviceMapperJson;
-import services.DeviceValidator;
-import views.html.*;
+import views.html.details;
+import views.html.list;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -21,7 +23,13 @@ import java.util.concurrent.CompletionStage;
  */
 public class DeviceController extends Controller {
 
-    public DeviceController() {
+    private FormFactory formFactory;
+    private Form<Device> deviceForm;
+
+    @Inject
+    public DeviceController(FormFactory formFactory) {
+        this.formFactory = formFactory;
+        this.deviceForm = formFactory.form(Device.class);
     }
 
     /**
@@ -29,15 +37,11 @@ public class DeviceController extends Controller {
      *
      * @return
      */
-    public CompletionStage<Result> list(){
+    public Result list(){
 
-        CompletionStage<List<Device>> promiseOfDevices = CompletableFuture.
-                supplyAsync(()->DeviceMapperJson.getDeviceListFromConfig());
+        List<Device> devices = DeviceMapperJson.getDeviceListFromConfig();
 
-        CompletionStage<Result> promiseOfResult = promiseOfDevices.
-                thenApply(devices -> ok(list.render(devices)));
-
-        return promiseOfResult;
+        return ok(list.render(devices));
     }
 
     /**
@@ -94,4 +98,38 @@ public class DeviceController extends Controller {
         return promiseOfResult;
     }
 
+    /**
+     * Gibt ein Form auf Basis der Klasse Device zurück
+     *
+     * @return
+     */
+    public Result newDeviceForm(){
+
+        return ok(details.render(deviceForm));
+    }
+
+    /**
+     * Speichert die Eigenschaften eines Devices in der Konfiguration
+     *
+     * Fehlerfall: Erzeugt eine Error-Meldung im main-template und gibt das fehlerhaft ausgefüllte Formular zurueck
+     *
+     * Erfolg: Erzeugt eine Success-Meldung im main-template und gibt die Liste aller konfigurierten Devices zurueck
+     *
+     *
+     * @return
+     */
+    public Result save() {
+        Form<Device> boundForm = deviceForm.bindFromRequest();
+        if(boundForm.hasErrors()) {
+            flash("error", "Device not added please correct the form below.");
+            return badRequest(details.render(boundForm));
+        }
+
+        Device newDevice = boundForm.get();
+        DeviceMapperJson.addDeviceToConfig(newDevice);
+        flash("success",
+                String.format("Successfully added device %s to configuration" , newDevice.getName()));
+
+        return redirect(routes.DeviceController.list());
+    }
 }

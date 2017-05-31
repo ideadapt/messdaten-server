@@ -1,5 +1,7 @@
 package model;
 
+import play.data.validation.Constraints;
+
 /**
  * Created by Nett on 27.05.2017.
  *
@@ -7,8 +9,10 @@ package model;
  */
 public class Device {
 
-    private String id = "";
+    @Constraints.Required
+    private String name = "";
     private String hostIp = "";
+    @Constraints.Required
     private String dataSource = "";
     private int group = 0;
     private String protocol = "";
@@ -16,16 +20,16 @@ public class Device {
     public Device() {
     }
 
-    public Device(String id, String hostIp, String dataSource, int group, String protocol) {
-        this.id = id;
+    public Device(String name, String hostIp, String dataSource, int group, String protocol) {
+        this.name = name;
         this.hostIp = hostIp;
         this.dataSource = dataSource;
         this.group = group;
         this.protocol = protocol;
     }
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
     public String getHostIp() {
@@ -42,6 +46,10 @@ public class Device {
 
     public String getProtocol() {
         return protocol;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setHostIp(String hostIp) {
