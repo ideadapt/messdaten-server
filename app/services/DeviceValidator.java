@@ -47,7 +47,7 @@ public class DeviceValidator {
      * @return
      */
     private static boolean hasRequieredMembers(Device newDevice){
-        if(newDevice.getId().trim().equals("")){
+        if(newDevice.getName().trim().equals("")){
             return false;
         }
         if(newDevice.getDataSource().trim().equals("")){
@@ -66,7 +66,7 @@ public class DeviceValidator {
     private static boolean isIdUnique(List<Device>devices,Device newDevice){
 
         for(Device device : devices){
-            if(device.getId().trim().equals(newDevice.getId().trim())){
+            if(device.getName().trim().equals(newDevice.getName().trim())){
                 return false;
             }
         }

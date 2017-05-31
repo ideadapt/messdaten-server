@@ -4,10 +4,16 @@
 GET     /list                       controllers.DeviceController.list
 # Gibt eine JasonNode aller konfigurierten Devices
 GET     /listJson                   controllers.DeviceController.listJson
+# Gibt ein Form mit Feldern für einen Device zurück
+GET     /device/new                 controllers.DeviceController.newDeviceForm
+# Speichert einen Device in der Konfiguration
+POST    /device/save                controllers.DeviceController.save
 # Legt einen neuen Device an
 POST    /device/new                 controllers.DeviceController.newDevice
 # Aktualisiert einen Device
 POST    /device/update              controllers.DeviceController.updateDevice
+
+
 
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index

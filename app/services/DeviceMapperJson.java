@@ -76,7 +76,7 @@ public class DeviceMapperJson {
 
         if(DeviceValidator.isValidForUpdate(devices,updDevice)){
             for(Device device : devices){
-                if(device.getId().equals(updDevice.getId())){
+                if(device.getName().equals(updDevice.getName())){
                     device.setHostIp(updDevice.getHostIp());
                     device.setDataSource(updDevice.getDataSource());
                     device.setGroup(updDevice.getGroup());
