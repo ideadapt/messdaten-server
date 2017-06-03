@@ -14,11 +14,15 @@
     <table border='1'>
         <tr><th>Id</th><th>HostIp</th><th>DataSource</th><th>Group</th><th>Protocol</th> </tr>
         @for(device <- devices) {
-            <tr><td>@device.getName</td>
+            <tr><td><a href="@routes.DeviceController.updateDeviceForm(device.getName)">@device.getName</a></td>
                 <td>@device.getHostIp</td>
                 <td>@device.getDataSource</td>
                 <td>@device.getGroup</td>
-                <td>@device.getProtocol</td></tr>
+                <td>@device.getProtocol</td>
+                <td><a href="@routes.DeviceController.updateDeviceForm(device.getName)">Update</a></td>
+                <td><a href="@routes.DeviceController.deleteDeviceForm(device.getName)">Delete</a></td>
+            </tr>
         }
     </table>
+    <a class="btn" href="@routes.DeviceController.newDeviceForm()">New</a>
 }
