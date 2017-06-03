@@ -12,6 +12,7 @@ import play.mvc.Result;
 import services.DeviceMapperJson;
 import views.html.details;
 import views.html.list;
+import views.html.update;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -86,7 +87,7 @@ public class DeviceController extends Controller {
      */
     public Result newDeviceForm(){
 
-        return ok(details.render(deviceForm, "new"));
+        return ok(details.render(deviceForm));
     }
 
     /**
@@ -102,7 +103,7 @@ public class DeviceController extends Controller {
         if (updateForm == null) {
             return notFound(String.format("Device %s does not exist.", name));
         }
-        return ok(details.render(updateForm, "update"));
+        return ok(update.render(updateForm));
     }
 
     /**
@@ -119,7 +120,7 @@ public class DeviceController extends Controller {
         Form<Device> updateForm = deviceForm.bindFromRequest();
         if(updateForm.hasErrors()) {
             flash("error", "Device not updated please correct the form below.");
-            return badRequest(details.render(updateForm, "update"));
+            return badRequest(update.render(updateForm));
         }
 
         Device updateDevice = updateForm.get();
@@ -144,7 +145,7 @@ public class DeviceController extends Controller {
         Form<Device> saveForm = deviceForm.bindFromRequest();
         if(saveForm.hasErrors()) {
             flash("error", "Device not added please correct the form below.");
-            return badRequest(details.render(saveForm, "new"));
+            return badRequest(details.render(saveForm));
         }
 
         Device newDevice = saveForm.get();
