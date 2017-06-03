@@ -8,13 +8,14 @@ GET     /listJson                   controllers.DeviceController.listJson
 GET     /device/new                 controllers.DeviceController.newDeviceForm
 # Gibt ein ausgefuelltes Form mit Feldern für den gesuchten Device zurück
 GET     /device/update/:name        controllers.DeviceController.updateDeviceForm(name: String)
+# Gibt ein ausgefuelltes Form mit Feldern für den gesuchten Device zurück
+GET     /device/delete/:name        controllers.DeviceController.deleteDeviceForm(name: String)
 # Speichert einen Device in der Konfiguration
 POST    /device/save                controllers.DeviceController.save
-# Legt einen neuen Device an
-POST    /device/new                 controllers.DeviceController.newDevice
 # Aktualisiert einen Device
 POST    /device/update              controllers.DeviceController.updateDevice
-
+# Loescht einen Devide aus der Konfiguration
+POST    /device/delete              controllers.DeviceController.deleteDevice
 
 
 # An example controller showing a sample home page
@@ -23,6 +24,5 @@ GET     /                           controllers.HomeController.index
 GET     /count                      controllers.CountController.count
 # An example controller showing how to write asynchronous code
 GET     /message                    controllers.AsyncController.message
-
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

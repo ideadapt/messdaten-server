@@ -131,4 +131,26 @@ public class DeviceMapperJson {
         return null;
     }
 
+    /**
+     * Loescht einen Device aus der Konfiguration
+     *
+     * Wirft eine IOException falls das Config-File nicht erstellt werden konnte
+     *
+     * @param delDevice
+     * @return
+     */
+    public static boolean deleteDeviceInConfig(Device delDevice){
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Device>devices = getDeviceListFromConfig();
+        boolean deleted = false;
+
+        deleted = devices.remove(delDevice);
+
+        try {
+            objectMapper.writeValue(new File("c:\\temp\\DeviceConfiguration.json"), devices);
+        } catch (IOException e) {
+            deleted = false;
+        }
+        return deleted;
+    }
 }

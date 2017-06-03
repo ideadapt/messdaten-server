@@ -13,6 +13,7 @@ import services.DeviceMapperJson;
 import views.html.details;
 import views.html.list;
 import views.html.update;
+import views.html.delete;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -62,25 +63,6 @@ public class DeviceController extends Controller {
     }
 
     /**
-     * Fuegt der Konfiguration einen neuen Device hinzu
-     *
-     * @return
-     */
-    @BodyParser.Of(BodyParser.Json.class)
-    public CompletionStage<Result> newDevice(){
-        JsonNode json = request().body().asJson();
-        Device newDevice = Json.fromJson(json,Device.class);
-
-        CompletionStage<Device> promiseOfDevice = CompletableFuture.
-                supplyAsync(() -> DeviceMapperJson.addDeviceToConfig(newDevice));
-
-        CompletionStage<Result> promiseOfResult = promiseOfDevice.
-                thenApply(device -> ok(Json.toJson(device)));
-
-        return promiseOfResult;
-    }
-
-    /**
      * Gibt ein Form auf Basis der Klasse Device zurück
      *
      * @return
@@ -88,6 +70,31 @@ public class DeviceController extends Controller {
     public Result newDeviceForm(){
 
         return ok(details.render(deviceForm));
+    }
+
+    /**
+     * Speichert die Eigenschaften eines Devices in der Konfiguration
+     *
+     * Fehlerfall: Erzeugt eine Error-Meldung im main-template und gibt das fehlerhaft ausgefüllte Formular zurueck
+     *
+     * Erfolg: Erzeugt eine Success-Meldung im main-template und gibt die Liste aller konfigurierten Devices zurueck
+     *
+     *
+     * @return
+     */
+    public Result save() {
+        Form<Device> saveForm = deviceForm.bindFromRequest();
+        if(saveForm.hasErrors()) {
+            flash("error", "Device not added please correct the form below.");
+            return badRequest(details.render(saveForm));
+        }
+
+        Device newDevice = saveForm.get();
+        DeviceMapperJson.addDeviceToConfig(newDevice);
+        flash("success",
+                String.format("Successfully added device %s to configuration" , newDevice.getName()));
+
+        return redirect(routes.DeviceController.list());
     }
 
     /**
@@ -132,27 +139,43 @@ public class DeviceController extends Controller {
     }
 
     /**
-     * Speichert die Eigenschaften eines Devices in der Konfiguration
+     * Gibt ein ausgefuelltes Form für den gesuchten Device zurück
+     *
+     * @return
+     */
+    public Result deleteDeviceForm(String name){
+
+        Device deleteDevice = DeviceMapperJson.findDevice(name);
+        Form<Device> deleteForm = deviceForm.fill(deleteDevice);
+
+        if (deleteForm == null) {
+            return notFound(String.format("Device %s does not exist.", name));
+        }
+        return ok(delete.render(deleteForm));
+    }
+
+    /**
+     * Loescht einen Device in der Konfiguration
      *
      * Fehlerfall: Erzeugt eine Error-Meldung im main-template und gibt das fehlerhaft ausgefüllte Formular zurueck
      *
      * Erfolg: Erzeugt eine Success-Meldung im main-template und gibt die Liste aller konfigurierten Devices zurueck
      *
-     *
      * @return
      */
-    public Result save() {
-        Form<Device> saveForm = deviceForm.bindFromRequest();
-        if(saveForm.hasErrors()) {
-            flash("error", "Device not added please correct the form below.");
-            return badRequest(details.render(saveForm));
+    public Result deleteDevice(){
+
+        Form<Device> deleteForm = deviceForm.bindFromRequest();
+
+        Device deleteDevice = deleteForm.get();
+        if(DeviceMapperJson.deleteDeviceInConfig(deleteDevice)){
+            flash("success",
+                    String.format("Successfully deleted device %s in configuration" , deleteDevice.getName()));
+        }else{
+            flash("error", "Device not deleted please check the form below.");
+            return badRequest(delete.render(deleteForm));
         }
-
-        Device newDevice = saveForm.get();
-        DeviceMapperJson.addDeviceToConfig(newDevice);
-        flash("success",
-                String.format("Successfully added device %s to configuration" , newDevice.getName()));
-
         return redirect(routes.DeviceController.list());
     }
+
 }

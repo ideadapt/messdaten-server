@@ -67,4 +67,16 @@ public class Device {
     public void setProtocol(String protocol) {
         this.protocol = protocol;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof Device)) {
+            return false;
+        }
+
+        Device device = (Device) obj;
+
+        return device.name.equals(name);
+    }
 }
