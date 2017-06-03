@@ -112,4 +112,23 @@ public class DeviceMapperJson {
         return devicesJson;
     }
 
+    /**
+     * Findet in der aktuellen Konfiguration einen Device ueber seinen Namen und gibt diesen zurueck.
+     * Wird kein Device gefunden gibt die Methode null zurueck.
+     *
+     * @param name
+     * @return
+     */
+    public static Device findDevice(String name){
+
+        List<Device>devices = getDeviceListFromConfig();
+
+        for(Device device : devices){
+            if(device.getName().equals(name)){
+                return device;
+            }
+        }
+        return null;
+    }
+
 }

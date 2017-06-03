@@ -2,21 +2,36 @@
 @import model.Device;
 @import helper._
 
-@(deviceForm : Form[Device])
+@(deviceForm : Form[Device])(update: String)
 
 @main("Device form") {
     <h1>Device form</h1>
-    @helper.form(action = routes.DeviceController.save()) {
-        <fieldset>
-            <legend>New Device</legend>
-            @helper.inputText(deviceForm("name"), '_label -> "Name")
-            @helper.inputText(deviceForm("hostIp"), '_label -> "Host-IP")
-            @helper.inputText(deviceForm("dataSource"),'_label -> "Data-Source")
-            @helper.inputText(deviceForm("group"), '_label -> "Group")
-            @helper.inputText(deviceForm("protocol"),'_label -> "Protocol")
-        </fieldset>
-        <input type="submit" class="btn btn-primary" value="Save">
-        <a class="btn" href="@routes.DeviceController.list()">Cancel</a>
-    }
 
+    @if(update == "update"){
+        @helper.form(action = routes.DeviceController.updateDevice()) {
+            <fieldset>
+                <legend>New Device</legend>
+                @helper.inputText(deviceForm("name"), '_label -> "Name",'readonly -> "readonly")
+                @helper.inputText(deviceForm("hostIp"), '_label -> "Host-IP")
+                @helper.inputText(deviceForm("dataSource"),'_label -> "Data-Source")
+                @helper.inputText(deviceForm("group"), '_label -> "Group")
+                @helper.inputText(deviceForm("protocol"),'_label -> "Protocol")
+            </fieldset>
+            <input type="submit" class="btn btn-primary" value="Update">
+            <a class="btn" href="@routes.DeviceController.list()">Cancel</a>
+        }
+    }else{
+        @helper.form(action = routes.DeviceController.save()) {
+            <fieldset>
+                <legend>New Device</legend>
+                @helper.inputText(deviceForm("name"), '_label -> "Name")
+                @helper.inputText(deviceForm("hostIp"), '_label -> "Host-IP")
+                @helper.inputText(deviceForm("dataSource"),'_label -> "Data-Source")
+                @helper.inputText(deviceForm("group"), '_label -> "Group")
+                @helper.inputText(deviceForm("protocol"),'_label -> "Protocol")
+            </fieldset>
+            <input type="submit" class="btn btn-primary" value="Save">
+            <a class="btn" href="@routes.DeviceController.list()">Cancel</a>
+        }
+    }
 }
