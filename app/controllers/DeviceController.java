@@ -12,6 +12,7 @@ import play.mvc.Result;
 import services.DeviceMapperJson;
 import views.html.details;
 import views.html.list;
+import views.html.update;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -80,25 +81,6 @@ public class DeviceController extends Controller {
     }
 
     /**
-     * Aktualisiert einen Device in der Konfiguration
-     *
-     * @return
-     */
-    @BodyParser.Of(BodyParser.Json.class)
-    public CompletionStage<Result> updateDevice(){
-        JsonNode json = request().body().asJson();
-        Device newDevice = Json.fromJson(json,Device.class);
-
-        CompletionStage<Device> promiseOfDevice = CompletableFuture.
-                supplyAsync(() -> DeviceMapperJson.updateDeviceInConfig(newDevice));
-
-        CompletionStage<Result> promiseOfResult = promiseOfDevice.
-                thenApply(device -> ok(Json.toJson(device)));
-
-        return promiseOfResult;
-    }
-
-    /**
      * Gibt ein Form auf Basis der Klasse Device zurück
      *
      * @return
@@ -106,6 +88,47 @@ public class DeviceController extends Controller {
     public Result newDeviceForm(){
 
         return ok(details.render(deviceForm));
+    }
+
+    /**
+     * Gibt ein ausgefuelltes Form für den gesuchten Device zurück
+     *
+     * @return
+     */
+    public Result updateDeviceForm(String name){
+
+        Device updateDevice = DeviceMapperJson.findDevice(name);
+        Form<Device> updateForm = deviceForm.fill(updateDevice);
+
+        if (updateForm == null) {
+            return notFound(String.format("Device %s does not exist.", name));
+        }
+        return ok(update.render(updateForm));
+    }
+
+    /**
+     * Aktualisiert einen Device in der Konfiguration
+     *
+     * Fehlerfall: Erzeugt eine Error-Meldung im main-template und gibt das fehlerhaft ausgefüllte Formular zurueck
+     *
+     * Erfolg: Erzeugt eine Success-Meldung im main-template und gibt die Liste aller konfigurierten Devices zurueck
+     *
+     * @return
+     */
+    public Result updateDevice(){
+
+        Form<Device> updateForm = deviceForm.bindFromRequest();
+        if(updateForm.hasErrors()) {
+            flash("error", "Device not updated please correct the form below.");
+            return badRequest(update.render(updateForm));
+        }
+
+        Device updateDevice = updateForm.get();
+        DeviceMapperJson.updateDeviceInConfig(updateDevice);
+        flash("success",
+                String.format("Successfully updated device %s in configuration" , updateDevice.getName()));
+
+        return redirect(routes.DeviceController.list());
     }
 
     /**
@@ -119,13 +142,13 @@ public class DeviceController extends Controller {
      * @return
      */
     public Result save() {
-        Form<Device> boundForm = deviceForm.bindFromRequest();
-        if(boundForm.hasErrors()) {
+        Form<Device> saveForm = deviceForm.bindFromRequest();
+        if(saveForm.hasErrors()) {
             flash("error", "Device not added please correct the form below.");
-            return badRequest(details.render(boundForm));
+            return badRequest(details.render(saveForm));
         }
 
-        Device newDevice = boundForm.get();
+        Device newDevice = saveForm.get();
         DeviceMapperJson.addDeviceToConfig(newDevice);
         flash("success",
                 String.format("Successfully added device %s to configuration" , newDevice.getName()));
