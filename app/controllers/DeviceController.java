@@ -5,15 +5,14 @@ import com.google.inject.Inject;
 import model.Device;
 import play.data.Form;
 import play.data.FormFactory;
-import play.libs.Json;
-import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.DeviceMapperJson;
+import services.ReadWriteException;
+import views.html.delete;
 import views.html.details;
 import views.html.list;
 import views.html.update;
-import views.html.delete;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -90,9 +89,14 @@ public class DeviceController extends Controller {
         }
 
         Device newDevice = saveForm.get();
-        DeviceMapperJson.addDeviceToConfig(newDevice);
-        flash("success",
-                String.format("Successfully added device %s to configuration" , newDevice.getName()));
+        try{
+            DeviceMapperJson.addDeviceToConfig(newDevice);
+            flash("success",
+                    String.format("Successfully added %s to configuration" , newDevice.getName()));
+        }catch(ReadWriteException ex){
+            flash("error", ex.getMessage());
+            return badRequest(details.render(saveForm));
+        }
 
         return redirect(routes.DeviceController.list());
     }
@@ -131,9 +135,14 @@ public class DeviceController extends Controller {
         }
 
         Device updateDevice = updateForm.get();
-        DeviceMapperJson.updateDeviceInConfig(updateDevice);
-        flash("success",
-                String.format("Successfully updated device %s in configuration" , updateDevice.getName()));
+        try {
+            DeviceMapperJson.updateDeviceInConfig(updateDevice);
+            flash("success",
+                    String.format("Successfully updated %s in configuration" , updateDevice.getName()));
+        }catch(ReadWriteException ex){
+            flash("error", ex.getMessage());
+            return badRequest(update.render(updateForm));
+        }
 
         return redirect(routes.DeviceController.list());
     }
@@ -170,7 +179,7 @@ public class DeviceController extends Controller {
         Device deleteDevice = deleteForm.get();
         if(DeviceMapperJson.deleteDeviceInConfig(deleteDevice)){
             flash("success",
-                    String.format("Successfully deleted device %s in configuration" , deleteDevice.getName()));
+                    String.format("Successfully deleted %s in configuration" , deleteDevice.getName()));
         }else{
             flash("error", "Device not deleted please check the form below.");
             return badRequest(delete.render(deleteForm));

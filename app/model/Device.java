@@ -14,13 +14,13 @@ public class Device {
     private String hostIp = "";
     @Constraints.Required
     private String dataSource = "";
-    private int group = 0;
+    private String group = "";
     private String protocol = "";
 
     public Device() {
     }
 
-    public Device(String name, String hostIp, String dataSource, int group, String protocol) {
+    public Device(String name, String hostIp, String dataSource, String group, String protocol) {
         this.name = name;
         this.hostIp = hostIp;
         this.dataSource = dataSource;
@@ -40,7 +40,7 @@ public class Device {
         return dataSource;
     }
 
-    public int getGroup() {
+    public String getGroup() {
         return group;
     }
 
@@ -60,7 +60,7 @@ public class Device {
         this.dataSource = dataSource;
     }
 
-    public void setGroup(int group) {
+    public void setGroup(String group) {
         this.group = group;
     }
 
