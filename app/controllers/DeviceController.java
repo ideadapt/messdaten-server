@@ -3,11 +3,14 @@ package controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.inject.Inject;
 import model.Device;
+import model.MeasurementValueXml;
 import play.data.Form;
 import play.data.FormFactory;
+import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 import services.DeviceMapperJson;
+import services.MeasurementValueReader;
 import services.ReadWriteException;
 import views.html.delete;
 import views.html.details;
@@ -59,6 +62,23 @@ public class DeviceController extends Controller {
                 thenApply(devices -> ok(devices));
 
         return promiseOfResult;
+    }
+
+    /**
+     * Liefert den aktuellen Messwert mit Zeitstempel des Devices gemäss deviceName
+     *
+     * @param deviceName
+     * @return
+     */
+    public Result getMeasureValue(String deviceName){
+
+        MeasurementValueXml actualValue = null;
+        try{
+            actualValue = MeasurementValueReader.getActualValueFromXml(deviceName);
+        }catch(ReadWriteException ex){
+            return badRequest(ex.getMessage());
+        }
+        return ok(Json.toJson(actualValue));
     }
 
     /**

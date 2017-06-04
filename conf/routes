@@ -1,9 +1,11 @@
 # Routing Devices
 
-# Gibt eine List<Device> aller konfigurierten Devices
+# Gibt eine List<Device> aller konfigurierten Devices zurueck
 GET     /list                       controllers.DeviceController.list
-# Gibt eine JasonNode aller konfigurierten Devices
+# Gibt eine JasonNode aller konfigurierten Devices zurueck
 GET     /listJson                   controllers.DeviceController.listJson
+# Gibt den aktuellen Messwert des gesuchten Devices zurueck
+GET     /device/value/:name         controllers.DeviceController.getMeasureValue(name: String)
 # Gibt ein leeres Form mit Feldern für einen Device zurück
 GET     /device/new                 controllers.DeviceController.newDeviceForm
 # Gibt ein ausgefuelltes Form mit Feldern für den gesuchten Device zurück
@@ -12,7 +14,7 @@ GET     /device/update/:name        controllers.DeviceController.updateDeviceFor
 GET     /device/delete/:name        controllers.DeviceController.deleteDeviceForm(name: String)
 # Speichert einen Device in der Konfiguration
 POST    /device/save                controllers.DeviceController.save
-# Aktualisiert einen Device
+# Aktualisiert einen Device in der Konfiguration
 POST    /device/update              controllers.DeviceController.updateDevice
 # Loescht einen Devide aus der Konfiguration
 POST    /device/delete              controllers.DeviceController.deleteDevice
