@@ -164,4 +164,21 @@ public class DeviceMapperJson {
         }
         return deleted;
     }
+
+    /**
+     * Gibt den Pfad des gesuchen Devices gemaess Konfiguration zurueck
+     *
+     * @param deviceName
+     * @return
+     */
+    public static  String getMeasurementValuePath(String deviceName){
+        List<Device>devices = getDeviceListFromConfig();
+
+        for(Device device : devices){
+            if(device.getName().equals(deviceName)){
+                return device.getDataSource();
+            }
+        }
+        return null;
+    }
 }
