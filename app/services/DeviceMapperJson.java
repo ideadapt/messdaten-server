@@ -19,21 +19,23 @@ import java.util.List;
  */
 public class DeviceMapperJson {
 
+    private static final String CONFIGPATH = "c:\\temp\\DeviceConfiguration.json";
+
     /**
      * Mapped DeviceConfiguration.json nach List<Device>devices und gibt diese Liste zurueck
      * Wirft eine IOException wenn die Liste nicht erstellt werden konnte
      *
      * @return
      */
-    public static List<Device> getDeviceListFromConfig() {
+    public static List<Device> getDeviceListFromConfig() throws ReadWriteException{
         ObjectMapper objectMapper = new ObjectMapper();
         TypeReference<List<Device>> listType = new TypeReference<List<Device>>(){};
         List<Device>devices = null;
-        String configPath = "c:\\temp\\DeviceConfiguration.json";
+        String configPath = CONFIGPATH;
         try {
             devices = objectMapper.readValue(new File(configPath),listType);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new  ReadWriteException("Could not find devices in " + CONFIGPATH + "\n" + e.getMessage());
         }
         return devices;
     }
@@ -42,22 +44,25 @@ public class DeviceMapperJson {
      * Fuegt der List<Device> einen neuen Device hinzu, falls dieser valid ist.
      * Mapped die Liste ins Json-Config-File
      *
-     * Wirft eine IOException falls das Config-File nicht erstellt werden konnte
+     * Wirft eine ReadWriteException falls das Config-File nicht erstellt werden konnte
      *
      * @param newDevice
      * @return
      */
-    public static Device addDeviceToConfig(Device newDevice){
+    public static Device addDeviceToConfig(Device newDevice)throws ReadWriteException{
         ObjectMapper objectMapper = new ObjectMapper();
         List<Device>devices = getDeviceListFromConfig();
 
         if(DeviceValidator.validateDevice(devices,newDevice)){
             devices.add(newDevice);
+        }else{
+            throw new  ReadWriteException( "Device " + newDevice.getName() + " not valid to add to configuration");
         }
         try {
-            objectMapper.writeValue(new File("c:\\temp\\DeviceConfiguration.json"), devices);
+            objectMapper.writeValue(new File(CONFIGPATH), devices);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new  ReadWriteException("Could not save new device-list to " + CONFIGPATH
+                    + ", after adding " + newDevice.getName() + "  to list"+ "\n" + e.getMessage());
         }
         return newDevice;
     }
@@ -65,12 +70,12 @@ public class DeviceMapperJson {
     /**
      * Aktualisiert einen Device in der Konfiguration
      *
-     * Wirft eine IOException falls das Config-File nicht erstellt werden konnte
+     * Wirft eine ReadWriteException falls das Config-File nicht erstellt werden konnte
      *
      * @param updDevice
      * @return
      */
-    public static Device updateDeviceInConfig(Device updDevice){
+    public static Device updateDeviceInConfig(Device updDevice)throws ReadWriteException{
         ObjectMapper objectMapper = new ObjectMapper();
         List<Device>devices = getDeviceListFromConfig();
 
@@ -83,11 +88,14 @@ public class DeviceMapperJson {
                     device.setProtocol(updDevice.getProtocol());
                 }
             }
+        }else{
+            throw new  ReadWriteException( "Device " + updDevice.getName() + " not valid to update in configuration");
         }
         try {
-            objectMapper.writeValue(new File("c:\\temp\\DeviceConfiguration.json"), devices);
+            objectMapper.writeValue(new File(CONFIGPATH), devices);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new  ReadWriteException("Could not save new device-list to " + CONFIGPATH
+                    + ", after updating " + updDevice.getName() + "  in list"+ "\n" + e.getMessage());
         }
         return updDevice;
     }
@@ -100,7 +108,7 @@ public class DeviceMapperJson {
      */
     public static JsonNode getJsonNode(){
 
-        File file = new File( "c:\\temp\\DeviceConfiguration.json");
+        File file = new File( CONFIGPATH);
         JsonNode devicesJson = null;
         try (
                 FileInputStream is =new FileInputStream(file);
@@ -134,22 +142,25 @@ public class DeviceMapperJson {
     /**
      * Loescht einen Device aus der Konfiguration
      *
-     * Wirft eine IOException falls das Config-File nicht erstellt werden konnte
+     * Wirft eine ReadWriteException falls das Config-File nicht erstellt werden konnte
      *
      * @param delDevice
      * @return
      */
-    public static boolean deleteDeviceInConfig(Device delDevice){
+    public static boolean deleteDeviceInConfig(Device delDevice) throws ReadWriteException{
         ObjectMapper objectMapper = new ObjectMapper();
         List<Device>devices = getDeviceListFromConfig();
         boolean deleted = false;
 
         deleted = devices.remove(delDevice);
-
+        if(!deleted){
+            throw new  ReadWriteException("Could not delete device " + delDevice.getName() +" from list");
+        }
         try {
-            objectMapper.writeValue(new File("c:\\temp\\DeviceConfiguration.json"), devices);
+            objectMapper.writeValue(new File(CONFIGPATH), devices);
         } catch (IOException e) {
-            deleted = false;
+            throw new  ReadWriteException("Could not save new device-list to " + CONFIGPATH
+                    + ", after removing " + delDevice.getName() + "  from list"+ "\n" + e.getMessage());
         }
         return deleted;
     }

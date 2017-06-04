@@ -14,7 +14,7 @@
     <table border='1'>
         <tr><th>Id</th><th>HostIp</th><th>DataSource</th><th>Group</th><th>Protocol</th> </tr>
         @for(device <- devices) {
-            <tr><td><a href="@routes.DeviceController.updateDeviceForm(device.getName)">@device.getName</a></td>
+            <tr><td>@device.getName</td>
                 <td>@device.getHostIp</td>
                 <td>@device.getDataSource</td>
                 <td>@device.getGroup</td>
