@@ -9,7 +9,7 @@
 
     @helper.form(action = routes.DeviceController.deleteDevice()) {
         <fieldset class="ourform">
-            <legend>New Device</legend>
+            <legend>Delete Device</legend>
             @helper.inputText(deviceForm("name"), '_label -> "Name", 'readonly -> "readonly")
             @helper.inputText(deviceForm("hostIp"), '_label -> "Host-IP", 'readonly -> "readonly")
             @helper.inputText(deviceForm("dataSource"), '_label -> "Data-Source", 'readonly -> "readonly")
