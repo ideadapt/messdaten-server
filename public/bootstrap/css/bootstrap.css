@@ -14,6 +14,20 @@ body {
     margin: 0;
 }
 
+.ourform [readonly]{
+    border-width: 1px;
+    background-color: #e3e3e3;
+    border-style: groove;
+}
+
+.info {
+    display: none;
+}
+
+.error {
+    color: #a94442;
+}
+
 article,
 aside,
 details,
@@ -5250,7 +5264,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     bottom: 0;
     margin-bottom: 0;
     border-width: 1px 0 0;
-    background: ghostwhite;
+    background: #dcdcdc;
     padding-left: 10px;
 
 }
@@ -6240,7 +6254,7 @@ a.thumbnail.active {
     color: #66512c;
 }
 
-.alert-danger {
+.alert-error {
     color: #a94442;
     background-color: #f2dede;
     border-color: #ebccd1;

@@ -27,7 +27,7 @@
                     <th>DataSource</th>
                     <th>Group</th>
                     <th>Protocol</th>
-                    <th>Update</th>
+                    <th>Edit</th>
                     <th>Delete</th>
                 </thead>
 
@@ -40,7 +40,7 @@
                         <td>@device.getDataSource</td>
                         <td>@device.getGroup</td>
                         <td>@device.getProtocol</td>
-                        <td width="5%" align="center"><a href="@routes.DeviceController.updateDeviceForm(device.getName)"><span class="glyphicon glyphicon-refresh"></span></a></td>
+                        <td width="5%" align="center"><a href="@routes.DeviceController.updateDeviceForm(device.getName)"><span class="glyphicon glyphicon-pencil"></span></a></td>
                         <td width="5%" align="center"><a href="@routes.DeviceController.deleteDeviceForm(device.getName)"><span class="glyphicon glyphicon-trash"></span></a></td>
                     </tr>
                 }
