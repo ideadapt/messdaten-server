@@ -8,7 +8,7 @@
     <h1>Device delete form</h1>
 
     @helper.form(action = routes.DeviceController.deleteDevice()) {
-        <fieldset>
+        <fieldset class="ourform">
             <legend>New Device</legend>
             @helper.inputText(deviceForm("name"), '_label -> "Name", 'readonly -> "readonly")
             @helper.inputText(deviceForm("hostIp"), '_label -> "Host-IP", 'readonly -> "readonly")
@@ -16,7 +16,7 @@
             @helper.inputText(deviceForm("group"), '_label -> "Group", 'readonly -> "readonly")
             @helper.inputText(deviceForm("protocol"), '_label -> "Protocol", 'readonly -> "readonly")
         </fieldset>
-        <input type="submit" class="btn btn-primary" value="Delete">
+        <input type="submit" class="btn btn-danger" value="Delete">
         <a class="btn" href="@routes.DeviceController.list()">Cancel</a>
     }
 }
