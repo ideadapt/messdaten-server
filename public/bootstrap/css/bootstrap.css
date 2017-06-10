@@ -5250,6 +5250,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
     bottom: 0;
     margin-bottom: 0;
     border-width: 1px 0 0;
+    background: ghostwhite;
+    padding-left: 10px;
+
 }
 
 .navbar-brand {
