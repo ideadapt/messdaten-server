@@ -55,6 +55,7 @@ public class MeasurementValueReader {
                     //Suchbegriff mit dem Wert des aktuellen Elements vergleichen
                     if(deviceId.equals(deviceName)){
                         // Messwert erstellen aus Xml-File
+                        measurementValue.setId(deviceId);
                         measurementValue.setValue(eElement.getElementsByTagName("Value").item(0).getTextContent());
                         measurementValue.setTime(xmlFile.lastModified());
                         break;

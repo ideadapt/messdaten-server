@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Messprogramm-Simulation</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="measurement.js"></script>
+</head>
+<body>
+<header>
+    <div class="container">
+        <h2>Simulation Messprogramm</h2>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <h3>Verfügbare Devices</h3>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Host-IP</th>
+                <th>Data-Source</th>
+                <th>Group</th>
+                <th>Protocol</th>
+                <th>Mess-Richtung</th>
+            </tr>
+            </thead>
+            <tbody id="deviceTable">
+            </tbody>
+        </table>
+    </div>
+    <div class="container" id="error">
+    </div>
+    <div class="container">
+        <h3>Programm-Ablauf</h3>
+        <button class="btn btn-primary" id="start" onclick="addDataDelayed()">Start Programm</button>
+        <button class="btn btn-primary" onclick="stopProgramm()">Stop Programm</button>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th class="device1">Device-Name : Direction</th>
+                <th>Timestamp</th>
+                <th class="device2">Device-Name : Direction</th>
+                <th>Timestamp</th>
+                <th>Position Z-Achse</th>
+            </tr>
+            </thead>
+            <tbody id="resultTable">
+            </tbody>
+        </table>
+    </div>
+</main>
+<footer>
+    <div class="container">
+        <small>Copyright ©
+            <time datetime="2017">2017</time>
+            by Team Messdaten-Server
+        </small>
+    </div>
+</footer>
+</body>
+</html>
