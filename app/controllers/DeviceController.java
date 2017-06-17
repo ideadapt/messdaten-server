@@ -17,6 +17,7 @@ import views.html.details;
 import views.html.list;
 import views.html.update;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -39,33 +40,49 @@ public class DeviceController extends Controller {
     /**
      * Gibt eine List<Device> aller in DeviceConfiguration.json enthaltenen Devices als Render-Objekt an die List-View.
      *
+     * Fehlerfall: Erzeugt eine Error-Meldung im main-template und gibt eine leere Liste zurueck
+     *
+     * Erfolg: Gibt die Liste aller konfigurierten Devices zurueck
+     *
      * @return
      */
     public Result list(){
 
-        List<Device> devices = DeviceMapperJson.getDeviceListFromConfig();
-
+        List<Device> devices = new ArrayList<>();
+        try {
+            devices = DeviceMapperJson.getDeviceListFromConfig();
+        }catch(ReadWriteException ex){
+            flash("error", ex.getMessage());
+            return badRequest(list.render(devices));
+        }
         return ok(list.render(devices));
     }
 
     /**
-     * Gibt ein JsonNode aller in DeviceConfiguration.json enthaltenen Devices als Render-Objekt an die List-View.
+     * Gibt ein JsonNode aller in DeviceConfiguration.json enthaltenen Devices als Render-Objekt zurueck.
+     *
+     * Fehlerfall: Gibt einen BadRequest mit der Message der Exception zurueck
+     *
+     * Erfolg: Gibt ein JsonNode mit allen konfigurierten Devices zurueck
      *
      * @return
      */
-    public CompletionStage<Result> listJson(){
-
-        CompletionStage<JsonNode> promiseOfReports = CompletableFuture.
-                supplyAsync(()->DeviceMapperJson.getJsonNode());
-
-        CompletionStage<Result> promiseOfResult = promiseOfReports.
-                thenApply(devices -> ok(devices));
-
-        return promiseOfResult;
+    public Result listJson(){
+        JsonNode devices = null;
+        try {
+            devices = DeviceMapperJson.getJsonNode();
+        }catch (ReadWriteException ex){
+            return badRequest(ex.getMessage());
+        }
+        return ok(devices);
     }
 
     /**
      * Liefert den aktuellen Messwert mit Zeitstempel des Devices gemäss deviceName
+     *
+     * Fehlerfall: Gibt einen BadRequest mit der Message der Exception zurueck
+     *
+     * Erfolg: Gibt dan aktuellen Messwert in Form einer Instanz von MeasurementValueXml als JsonNode zurueck
      *
      * @param deviceName
      * @return

@@ -106,16 +106,15 @@ public class DeviceMapperJson {
      *
      * @return
      */
-    public static JsonNode getJsonNode(){
+    public static JsonNode getJsonNode() throws ReadWriteException{
 
         File file = new File( CONFIGPATH);
         JsonNode devicesJson = null;
-        try (
-                FileInputStream is =new FileInputStream(file);
-        ){
+        try {
+            FileInputStream is =new FileInputStream(file);
             devicesJson = Json.parse(is);
         } catch(IOException e){
-            e.printStackTrace();
+            throw new  ReadWriteException("Could not find devices in " + CONFIGPATH + "\n" + e.getMessage());
         }
         return devicesJson;
     }
