@@ -1,11 +1,11 @@
 @*
- * This template is called from the `index` template. This template
- * handles the rendering of the page header and body tags. It takes
- * two arguments, a `String` for the title of the page and an `Html`
- * object to insert into the body of the page.
+* This template is called from the `index` template. This template
+* handles the rendering of the page header and body tags. It takes
+* two arguments, a `String` for the title of the page and an `Html`
+* object to insert into the body of the page.
 * <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-*   <link href="@routes.Assets.at("\"bootstrap/css/bootstrap.min.css\")" rel="stylesheet" media="screen">
- *@
+* <link href="@routes.Assets.at("\"bootstrap/css/bootstrap.min.css\")" rel="stylesheet" media="screen">
+*@
 @(title: String)(content: Html)
 
 <!DOCTYPE html>
@@ -21,34 +21,64 @@
         <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
 
         <script type="text/javascript" class="init">
-                $(document).ready(function() {
+                $(document).ready(function () {
                     $('#list').DataTable({
                         //removing arrows from 'edit' and 'delete' columns
-                        "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 5, 6 ] } ]
+                        "aoColumnDefs": [{"bSortable": false, "aTargets": [5, 6]}]
                     });
-                } );
+                });
         </script>
 
     </head>
-    <body class="container">
-        @if(flash.containsKey("success")){
-            <div class="alert alert-success">
-            @flash.get("success")
-            </div>
-        }
+    <body>
 
-        @if(flash.containsKey("error")){
-            <div class="alert alert-error">
-            @flash.get("error")
+
+        <nav class="navbar navbar-fixed-top" style="background-color: #e3e3e3;" role="navigation">
+            <div class="container">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <img class="logo" src="@routes.Assets.versioned("images/logo.png")" height="50">
+                </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="@routes.Assets.versioned("sim/measurement.html")">Simulation</a>
+                        </li>
+                        <li>
+                            <a href="#">Documentation</a>
+                        </li>
+                        <li>
+                            <a href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        }
-        @* And here's where we render the `Html` object containing
-         * the page content. *@
-        @content
+        </nav>
+
+
+        <div class="container">
+
+            @if(flash.containsKey("success")) {
+                <div class="alert alert-success">
+                @flash.get("success")
+                </div>
+            }
+
+            @if(flash.containsKey("error")) {
+                <div class="alert alert-error">
+                @flash.get("error")
+                </div>
+            }
+            @* And here's where we render the `Html` object containing
+            * the page content. *@
+            @content
+        </div>
     </body>
     <div class="navbar-fixed-bottom">
         <br>
-        <p>Copyright &copy <script type="text/javascript">document.write(new Date().getFullYear());</script> by Team Messdaten-Server
+        <p>Copyright &copy <script type="text/javascript">document.write(new Date().getFullYear());</script>
+            by Team Messdaten-Server
         </p>
     </div>
 </html>
