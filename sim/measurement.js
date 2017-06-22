@@ -12,6 +12,8 @@
  */
 let MAXPOS = 100;
 let STEP = 10;
+let STOP = 600;
+let ERROR = 500;
 let time = 0;
 let position = 0;
 
@@ -43,7 +45,13 @@ xmlhttpDevList.onload = function (e) {
         }
     }
 };
+
+xmlhttpDevList.ontimeout = function(){
+    showError("Der Dienst messdaten-server antwortet nicht");
+};
+
 xmlhttpDevList.open("GET", "http://localhost:9000/listJson", true);
+xmlhttpDevList.timeout = 2000;
 xmlhttpDevList.send();
 
 /**
@@ -77,7 +85,7 @@ function registerHandlers() {
  * @param cmd
  * @param prgEnd
  */
-function changeCheckboxState(cmd, prgEnd = false) {
+function changeCheckboxState(cmd, prgEnd) {
     $('#deviceTable').find('tr').each(function () {
         let row = $(this);
         if (!row.find('input[type="checkbox"]').is(':checked')) {
@@ -98,7 +106,7 @@ function changeCheckboxState(cmd, prgEnd = false) {
  * Stoppt das Programm und setzt die selektierten Checkboxen auf enable
  */
 function stopProgramm() {
-    position = MAXPOS + STEP;
+    position = STOP;
     changeCheckboxState(true, true);
 }
 
@@ -134,6 +142,7 @@ function addDataDelayed() {
         if (position > MAXPOS) {
             changeCheckboxState(true, true);
             clearInterval(retVar);
+            selectMessage();
         } else {
             let table = document.getElementById("resultTable");
             let rowCount = table.rows.length;
@@ -159,7 +168,7 @@ function addDataDelayed() {
 
                                 let json = JSON.parse(xmlhttp.responseText);
                                 if (!parseJsonResponse(json, deviceValues)) {
-                                    position = MAXPOS + STEP;
+                                    position = ERROR;
                                 }
                                 if (checkArray(deviceValues)) {
                                     newrow.insertCell(0).innerHTML = deviceValues[0];
@@ -171,11 +180,17 @@ function addDataDelayed() {
                                 }
                             } else if (xmlhttp.status == 400) {
                                 showError(xmlhttp.responseText);
-                                position = MAXPOS + 10;
+                                position = ERROR;
                             }
                         }
                     };
+                    xmlhttp.ontimeout = function(){
+                        showError("Der Dienst messdaten-server antwortet nicht");
+                        position = ERROR;
+                    };
+
                     xmlhttp.open("GET", "http://localhost:9000/device/value/" + name + '?_=' + new Date().getTime(), true);
+                    xmlhttp.timeout = 2000;
                     xmlhttp.send();
                 }
             });
@@ -230,7 +245,7 @@ function parseJsonResponse(json, deviceValues) {
             time = json.time;
         }
     } else {
-        showError('Messprogramm gestoppt!\nKeine gültigen Messwerte von Device ' + json.id + ' verfügbar\n');
+        showError('Messprogramm gestoppt!\nKeine gültigen Messwerte von Device ' + json.id + ' verfügbar');
         return false;
     }
     return true;
@@ -263,13 +278,40 @@ function checkArray(deviceValues) {
 }
 
 /**
+ * Loest die entsprechende Message aus
+ */
+function selectMessage(){
+
+     switch(position){
+        case MAXPOS + STEP:
+            showMessage('Das Programm wurde erfolgreich beendet!');
+            break;
+        case STOP:
+            showMessage('Das Programm wurde abgebrochen!');
+            break;
+        default:
+            break;
+     }
+}
+
+/**
  * Loest eine Fehlermeldung mit der uebergebenen Meldung aus.
  *
  * @param message
  */
 function showError(message) {
-    $("#error").html('<div class="alert alert-danger"></div>');
+    $("#error").html('<div class="text-center alert alert-danger"></div>');
     $(".alert-danger").html(message);
+}
+
+/**
+ * Loest eine Betriebsmeldung mit dem uebergebenen Text aus.
+ *
+ * @param message
+ */
+function showMessage(message) {
+    $("#error").html('<div class="text-center alert alert-info"></div>');
+    $(".alert-info").html(message);
 }
 
 /**
@@ -287,3 +329,17 @@ function resetHeader() {
     $("th.device2").html('Device-Name : Direction');
 }
 
+/**
+* Minimiert/Maximiert die Liste der Devices und passt die Bezeichnung des Symbols an
+*
+*/
+function minMaxList(){
+   $("#tablelist tbody").toggle("fast");
+
+   if($("#mini").html().indexOf('-') != -1){
+    $("#mini").html('+');
+   }else{
+    $("#mini").html('-');
+   }
+
+}
