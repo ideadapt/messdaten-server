@@ -165,7 +165,7 @@ public class DeviceMapperJson {
     }
 
     /**
-     * Gibt den Pfad des gesuchen Devices gemaess Konfiguration zurueck
+     * Gibt den Pfad der Data-Source des gesuchen Devices gemaess Konfiguration zurueck
      *
      * @param deviceName
      * @return
@@ -176,6 +176,23 @@ public class DeviceMapperJson {
         for(Device device : devices){
             if(device.getName().equals(deviceName)){
                 return device.getDataSource();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gibt das Protokoll des gesuchen Devices gemaess Konfiguration zurueck
+     *
+     * @param deviceName
+     * @return
+     */
+    public static  String getMeasurementValueProtocol(String deviceName){
+        List<Device>devices = getDeviceListFromConfig();
+
+        for(Device device : devices){
+            if(device.getName().equals(deviceName)){
+                return device.getProtocol();
             }
         }
         return null;

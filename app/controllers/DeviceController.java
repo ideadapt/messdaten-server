@@ -91,7 +91,7 @@ public class DeviceController extends Controller {
 
         MeasurementValueXml actualValue = null;
         try{
-            actualValue = MeasurementValueReader.getActualValueFromXml(deviceName);
+            actualValue = MeasurementValueReader.getActualValue(deviceName);
         }catch(ReadWriteException ex){
             return badRequest(ex.getMessage());
         }
