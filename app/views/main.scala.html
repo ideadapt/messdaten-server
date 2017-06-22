@@ -15,25 +15,18 @@
         <title>@title</title>
         <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("bootstrap/css/bootstrap.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-        <script src="@routes.Assets.versioned("javascripts/script.js")" type="text/javascript"></script>
-
-
-
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
-
-
         <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
         <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
 
         <script type="text/javascript" class="init">
-
                 $(document).ready(function() {
                     $('#list').DataTable({
+                        //removing arrows from 'edit' and 'delete' columns
                         "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 5, 6 ] } ]
                     });
                 } );
-
         </script>
 
     </head>
@@ -55,8 +48,7 @@
     </body>
     <div class="navbar-fixed-bottom">
         <br>
-        <p>Copyright &copy <script type="text/javascript">document.write(new Date().getFullYear());
-        </script>
+        <p>Copyright &copy <script type="text/javascript">document.write(new Date().getFullYear());</script> by Team Messdaten-Server
         </p>
     </div>
 </html>
