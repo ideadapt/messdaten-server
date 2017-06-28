@@ -11,14 +11,14 @@ import static org.fluentlenium.core.filter.FilterConstructor.*;
 public class IntegrationTest {
 
     /**
-     * add your integration test here
-     * in this example we just check if the welcome page is being shown
+     * integration test
+     * just check if the device-liste page is being shown
      */
     @Test
     public void test() {
-        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
-            browser.goTo("http://localhost:3333");
-            assertTrue(browser.pageSource().contains("Your new application is ready."));
+        running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
+            browser.goTo("http://localhost:9000/list");
+            assertTrue(browser.pageSource().contains("Device-Liste"));
         });
     }
 
