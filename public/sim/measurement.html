@@ -4,25 +4,47 @@
     <meta charset="UTF-8">
     <title>Messprogramm-Simulation</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript" src="measurement.js"></script>
 </head>
 <body>
 <header>
-    <div class="navbar navbar-default">
+    <nav class="navbar navbar-default">
         <div class="container">
-            <h2>Simulation Messprogramm</h2>
+            <br>
+            <div class="navbar-header">
+                <img class="logo" src="logo.png" height="50">
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#" onclick="window.location.replace('http://localhost:9000/list')">Configuration</a>
+                    </li>
+                    <li>
+                        <a href="#">Documentation</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
+    </nav>
 </header>
 <main>
     <div class="container">
         <h3>Verfügbare Devices</h3>
-        <table class="table table-striped" id="tablelist">
+        <table class="table table-striped" id="tablelist" cellspacing="0">
             <thead>
-            <tr class="header expand">
-                <th><button class="btn btn-primary" id="mini" onclick="minMaxList()" >-</button></th>
+            <tr>
+                <th>
+                    <button class="btn btn-primary" id="mini" onclick="minMaxList()">-</button>
+                </th>
                 <th>Name</th>
                 <th>Host-IP</th>
                 <th>Data-Source</th>

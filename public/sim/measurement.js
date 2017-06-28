@@ -39,6 +39,7 @@ xmlhttpDevList.onload = function (e) {
                 row.insertCell(6).innerHTML = '<select class="form-control" id="direction"><option>X-Richtung</option><option>Y-Richtung</option></select>';
             }
             registerHandlers();
+            addSortable();
         }else if (xmlhttpDevList.status == 400) {
             showError(xmlhttpDevList.responseText);
             document.querySelector("#start").disabled = true;
@@ -50,7 +51,7 @@ xmlhttpDevList.ontimeout = function(){
     showError("Der Dienst messdaten-server antwortet nicht");
 };
 
-xmlhttpDevList.open("GET", "http://localhost:9000/listJson", true);
+xmlhttpDevList.open("GET", "http://localhost:9000/listJson" + '?_=' + new Date().getTime(), true);
 xmlhttpDevList.timeout = 2000;
 xmlhttpDevList.send();
 
@@ -77,6 +78,14 @@ function registerHandlers() {
             changeCheckboxState(false);
         }
     });
+}
+
+function addSortable(){
+
+    $('#tablelist').DataTable({
+        //removing arrows from 'checkbox' and 'direction' columns
+        "aoColumnDefs": [{"bSortable": false, "aTargets": [0, 6]}]
+     });
 }
 
 /**
