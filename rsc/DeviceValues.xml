@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <DeviceList>
   <Device>
-    <Id>Abcd1234</Id>
-    <Value>1.025</Value>
+    <Id>device1</Id>
+    <Value>0.985</Value>
   </Device>
-<Device>
-    <Id>Abcd5678</Id>
-    <Value>5.236</Value>
+  <Device>
+    <Id>device3</Id>
+    <Value>3.744</Value>
   </Device>
 </DeviceList>
