@@ -15,7 +15,7 @@ public class IntegrationTest {
      * just check if the device-liste page is being shown
      */
     @Test
-    public void test() {
+    public void testDeviceListPage() {
         running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
             browser.goTo("http://localhost:9000/list");
             assertTrue(browser.pageSource().contains("Device-Liste"));

@@ -1,12 +1,46 @@
 import model.Device;
+import play.mvc.Result;
 import services.DeviceValidator;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.*;
+
 import static org.junit.Assert.*;
 
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
-public class DeviceValidatorTest {
+import static play.test.Helpers.*;
+import play.mvc.Http.RequestBuilder;
+
+
+public class FunctionalTest {
+
+    @Test
+    public void testBadRoute() {
+        running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
+            browser.goTo("http://localhost:9000");
+            RequestBuilder request = new RequestBuilder()
+                    .method(GET)
+                    .uri("/xx/wrongRoute");
+
+            Result result = route(request);
+            assertEquals(NOT_FOUND, result.status());
+        });
+    }
+
+    @Test
+    public void testGoodRoute() {
+        running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
+            browser.goTo("http://localhost:9000");
+            RequestBuilder request = new RequestBuilder()
+                    .method(GET)
+                    .uri("/list");
+
+            Result result = route(request);
+            assertEquals(OK, result.status());
+        });
+    }
+
 
     @Test
     public void validateDeviceWithValidReturnsTrue() {
