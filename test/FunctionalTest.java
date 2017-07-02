@@ -15,6 +15,7 @@ import play.mvc.Http.RequestBuilder;
 
 public class FunctionalTest {
 
+    //Testing Controller Action through Routing
     @Test
     public void testBadRoute() {
         running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
@@ -24,7 +25,7 @@ public class FunctionalTest {
                     .uri("/xx/wrongRoute");
 
             Result result = route(request);
-            assertEquals(NOT_FOUND, result.status());
+            assertEquals(NOT_FOUND, result.status()); //erwartet 404 "Not Found"
         });
     }
 
@@ -37,19 +38,22 @@ public class FunctionalTest {
                     .uri("/list");
 
             Result result = route(request);
-            assertEquals(OK, result.status());
+            assertEquals(OK, result.status()); //erwartet 200 "OK"
+            assertEquals("text/html", result.contentType().get());
+            assertEquals("utf-8", result.charset().get());
         });
     }
 
 
+    //Testing DeviceValidator
     @Test
     public void validateDeviceWithValidReturnsTrue() {
 
         List<Device> devices = new ArrayList<>();
-        devices.add(new Device("device1", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1"));
-        devices.add(new Device("device2", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1"));
-        devices.add(new Device("device3", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1"));
-        Device newDevice = new Device("device4", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1");
+        devices.add(new Device("device1", "192.230.25.26", "c:/temp/values.txt", "group1", "txt"));
+        devices.add(new Device("device2", "192.230.25.26", "c:/temp/values.txt", "group2", "xml"));
+        devices.add(new Device("device3", "192.230.25.26", "c:/temp/values.txt", "group1", "txt"));
+        Device newDevice = new Device("device4", "192.230.25.26", "c:/temp/values.txt", "group3", "xml");
 
         boolean valid = DeviceValidator.validateDevice(devices, newDevice);
 
@@ -60,10 +64,10 @@ public class FunctionalTest {
     public void validateDeviceWithExistingNameReturnsFalse() {
 
         List<Device> devices = new ArrayList<>();
-        devices.add(new Device("device1", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1"));
-        devices.add(new Device("device2", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1"));
-        devices.add(new Device("device3", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1"));
-        Device newDevice = new Device("device1", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1");
+        devices.add(new Device("device1", "192.230.25.26", "c:/temp/values.txt", "group1", "txt"));
+        devices.add(new Device("device2", "192.230.25.26", "c:/temp/values.txt", "group2", "xml"));
+        devices.add(new Device("device3", "192.230.25.26", "c:/temp/values.txt", "group1", "txt"));
+        Device newDevice = new Device("device1", "192.230.25.26", "c:/temp/values.txt", "group3", "xml");
 
         boolean valid = DeviceValidator.validateDevice(devices, newDevice);
 
@@ -74,10 +78,10 @@ public class FunctionalTest {
     public void validateDeviceWithEmptyStringNameReturnsFalse() {
 
         List<Device> devices = new ArrayList<>();
-        devices.add(new Device("device1", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1"));
-        devices.add(new Device("device2", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1"));
-        devices.add(new Device("device3", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1"));
-        Device newDevice = new Device("", "192.230.25.26", "c:/temp/values.txt", "A", "txt-1");
+        devices.add(new Device("device1", "192.230.25.26", "c:/temp/values.txt", "group1", "txt"));
+        devices.add(new Device("device2", "192.230.25.26", "c:/temp/values.txt", "group2", "xml"));
+        devices.add(new Device("device3", "192.230.25.26", "c:/temp/values.txt", "group1", "txt"));
+        Device newDevice = new Device("", "192.230.25.26", "c:/temp/values.txt", "group3", "xml");
 
         boolean valid = DeviceValidator.validateDevice(devices, newDevice);
 
