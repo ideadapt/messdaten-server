@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Messprogramm-Simulation</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel='stylesheet' media="screen" type='text/css' href='../bootstrap/css/bootstrap.css'>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
+    <link rel="shortcut icon" type="image/png" href="../images/favicon.png">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
@@ -13,20 +14,22 @@
     <script type="text/javascript" src="measurement.js"></script>
 </head>
 <body>
+
 <header>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-fixed-top" style="background-color: #e3e3e3;" role="navigation">
         <div class="container">
-            <br>
+            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <img class="logo" src="logo.png" height="50">
+                <img class="logo" src="../images/logo.png" height="50">
             </div>
-            <div class="collapse navbar-collapse">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
                         <a href="#" onclick="window.location.replace('http://localhost:9000/list')">Configuration</a>
                     </li>
                     <li>
-                        <a href="../html/documentation.html">Documentation</a>
+                        <a href="../html/documentation.html">Configuration</a>
                     </li>
                 </ul>
             </div>
@@ -76,14 +79,11 @@
     </div>
 </main>
 <footer>
-    <div class="navbar navbar-default navbar-fixed-bottom">
-        <div class="container">
-            <br>
-            <small>Copyright ©
-                <time datetime="2017">2017</time>
-                by Team Messdaten-Server
-            </small>
-        </div>
+    <div class="navbar-fixed-bottom">
+        <br>
+        <p>Copyright &copy <script type="text/javascript">document.write(new Date().getFullYear());</script>
+            by Team Messdaten-Server
+        </p>
     </div>
 </footer>
 </body>
