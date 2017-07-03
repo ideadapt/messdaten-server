@@ -28,9 +28,9 @@ Der Server wurde auf Basis des Play-Framework in Java realisiert.
 
 Bei der Umsetzung der Client-Seite für die Konfiguration der Mess-Devices wurde HTML in Verbindung mit Scala eingesetzt.
 
-Die Simulations-Seite wurde in HTML und JavaScript erstellt, die Sourcen sind in public/sim abgelegt.
+Die Simulations-Seite wurde in HTML und JavaScript erstellt, und die Sourcen sind in public/sim abgelegt.
 
-Bei den eingestzten Libraries handelt es sich hauptsächlich um Bootstrap und JQuery.
+Bei den eingesetzten Libraries handelt es sich hauptsächlich um Bootstrap und JQuery.
 
 
 ## Installation
@@ -64,19 +64,20 @@ Folgende Schritte müssen zur Installation ausgeführt werden:
 
 ## Simulation starten
 
-* Aus der Konfigurations-Seite kann über die **Schaltfläche Simulation** die Messprogramm-Simulations-Seite geöffnet werden
+* Aus der Konfigurations-Seite kann über die **Schaltfläche Simulation** die Messprogramm-Simulations-Seite geöffnet werden.
 
-* **MesswertErzeuger.exe starten**, die Checkboxen für device1 und device3 markieren und den Start-Button betätigen
+* **MesswertErzeuger.exe starten**, die Checkboxen für device1 und device3 markieren und den Start-Button betätigen.
+    ![alt tag](res/messwert_erzeuger.jpg)
 
-* Der Messwert-Erzeuger schreibt Zufallswerte in die Datei DeviceValues.xml die in der Konfiguration als Data-Source definiert ist, und simuliert so die aktuellen Werte der Mess-Devices
+* Der Messwert-Erzeuger schreibt Zufallswerte in die Datei DeviceValues.xml die in der Konfiguration als Data-Source definiert ist, und simuliert so die aktuellen Werte der Mess-Devices.
 
-* In der Simulation-Seite ebenfalls **device1 und device3 markieren** und den **Start-Programm-Button** betätigen
+* In der Simulation-Seite ebenfalls **device1 und device3 markieren** und den **Start-Programm-Button** betätigen.
 
-* Im 2-Sekunden-Intervall werden nun die Messwerte der zwei Devices mit den entsprechenden Zeitstempeln vom Messwert-Server angefordert
+* Im 2-Sekunden-Intervall werden nun die Messwerte der zwei Devices mit den entsprechenden Zeitstempeln vom Messwert-Server angefordert.
 
-* In der letzten Spalte wird symbolisch die Position der Z-Achse dargestellt die vermessen wird
+* In der letzten Spalte wird symbolisch die Position der Z-Achse dargestellt, welche vermessen wird.
 
-* Bei Programm-Ende, Programm-Stopp, wenn keine aktuellen Messwert zur Verfügung stehen etc, werden entsprechende Meldungen ausgegeben.
+* Bei Programm-Ende, Programm-Stopp, wenn keine aktuellen Messwert zur Verfügung stehen etc. werden entsprechende Meldungen ausgegeben.
 
 
 ## Entwicklungsteam
