@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Documentation</title>
+    <link rel='stylesheet' media="screen" type='text/css' href='../bootstrap/css/bootstrap.css'>
+</head>
+<body>
+
+<nav class="navbar navbar-fixed-top" style="background-color: #e3e3e3;" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <img class="logo" src="../images/logo.png" height="50">
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="../sim/measurement.html">Simulation</a>
+                </li>
+                <li>
+                    <a href="/list">Configuration</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    <h3>ProjektbeschreibungMessdaten-Verwaltung</h3>
+    <br>
+    <h4>Entwicklungsteam:</h4>
+    <p>Patrick Stoffel, Cla Tschenett und Hans-Jürg Nett</p>
+    <br>
+    <h4>Einleitung</h4>
+    <p>Die Firma Trumpf ist ein Hersteller von Blechbearbeitungsmaschinen verschiedenster Ausprägung.
+    In der Tochtergesellschaft in Grüsch werden unter anderem 2D-Laserschneidmaschinen produziert, in deren standardisiertem Herstellungsprozess das Resultat dieser Semesterarbeit eingebunden wird.
+    Die Laserschneidmaschinen haben im Wesentlichen das bei Werkzeugmaschinen bekannte Achsen-Koordinatensystem mit einer X-, Y- und Z-Achse.
+    Die Z-Achse ist die zu messende Achse, die X- und Y-Achse entsprechen den Richtungen, in denen die Z-Achse ausgerichtet werden soll.</p>
+    <br>
+    <h4>Definition der Ausdrücke</h4>
+    <p><strong>Messmittel:</strong> Momentan Messuhren, später auch andere Komponenten</p>
+    <p><strong>Messrechner:</strong> Rechner, an den das Messmittel angeschlossen ist und auf dem ein Treiber läuft, der die Messdaten zur Verfügung stellt.</p>
+    <p><strong>Maschine:</strong> Laserschneidmaschine, die vermessen werden soll und auf der das Messprogramm läuft, das die Achsen bewegt und die Messwerte der Messmittel einliest.</p>
+    <p><strong>Webservice:</strong> Ein Dienst, der auf einem zentralen Host läuft und der die benötigten Funktionen zur Verfügung stellt, um die Forderungen zu erfüllen.</p>
+    <br>
+    <h4>Ausgangslage</h4>
+    <p>Die Vermessung der Geradheit der Z-Achse in X-und Y-Richtung ist der Arbeitsablauf, der standardisiert und vereinfacht werden soll.
+    Momentan wird mit Hilfe einer Messuhr die über ein Kabel mit einem Auswertegerät verbunden ist, eine Achs-Richtung nach der anderen vermessen.
+    Jeder Messpunkt muss manuell angefahren und der jeweilige Messwert am Auswertegerät gespeichert werden.
+    Die Messresultate müssen dann zur weiteren Verarbeitung in einem weiteren Schritt vom Auswertegerät an eine zentrale Stelle übermittelt werden.</p>
+    <br>
+    <h4>Aufgabe</h4>
+    <p>Der Ablauf soll so automatisiert werden, dass die Messung in einem Ablauf durchgeführt werden kann und die Forderungen aus den User Storys erfüllt werden.
+    Die Messung muss für den QS-Mitarbeiter einfach durchführbar sein, so dass er nur ein Programm auf der Lasermaschine starten kann und alle weiteren Schritte automatisch respektive dialoggeführt ablaufen.
+    Die Umsetzung der Aufgabe wird auf Basis eines Rest-Webservice mit Play-Java realisiert, wobei die Konfiguration der Messmittel im Browser möglich sein soll.
+    Die Semesterarbeit beinhaltet die Umsetzung des Webservice. Die Bereitstellung der Messwerte und das Messprogramm auf der Lasermaschine sind nicht Teil dieses Sprints und werden als Mock simuliert.</p>
+    <br>
+    <h4>Termine</h4>
+    <p>Projektstart: 09.05.2017</p>
+    <p>Sprint Planning: 24.05.2017</p>
+    <p>Abgabe Inkrement: 04.07.2017</p>
+    <p>Präsentation: 06.07.2017</p>
+    <br>
+    <h4>UserStorys</h4>
+    <table class="table table-striped">
+        <tbody>
+        <tr>
+            <td width="84">
+                <p><strong>ID</strong></p>
+            </td>
+            <td width="590">
+                <p><strong>User Story</strong></p>
+            </td>
+        </tr>
+        <tr>
+            <td width="84">
+                <p>1</p>
+            </td>
+            <td width="590">
+                <p>Als QS-Mitarbeiter m&ouml;chte ich bei Programm-Start ein Messmittel ausw&auml;hlen und der entsprechenden Messrichtung zuweisen k&ouml;nnen, damit ich bei der Wahl der Messmittel flexibel sein kann.</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="84">
+                <p>2</p>
+            </td>
+            <td width="590">
+                <p>Als QS-Mitarbeiter m&ouml;chte ich die Zuordnung der Messmittel zu einem Messrechner in einem Konfigurationsfile speichern und gegebenfalls anpassen k&ouml;nnen, damit ich die Messmittel, wenn notwendig, an einem anderen Messrechner einsetzen kann.</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="84">
+                <p>3</p>
+            </td>
+            <td width="590">
+                <p>Als QS-Mitarbeiter m&ouml;chte ich Messmittel mit kabelloser Kommunikation einsetzen k&ouml;nnen, damit der Vorbereitungsaufwand kleiner wird und Probleme mit defekten Kabeln vermieden werden k&ouml;nnen.</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="84">
+                <p>4</p>
+            </td>
+            <td width="590">
+                <p>Als QS-Mitarbeiter m&ouml;chte ich die Messung in einem Ablauf durchf&uuml;hren k&ouml;nnen, damit der Zeitaufwand pro Messung kleiner wird.</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="84">
+                <p>5</p>
+            </td>
+            <td width="590">
+                <p>Als QS-Mitarbeiter m&ouml;chte ich, dass die Messergebnisse bei Programmende automatisch in der Standartablage gespeichert werden, damit der Zeitaufwand pro Messung kleiner wird und weniger fehleranf&auml;llig ist.</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="84">
+                <p>6</p>
+            </td>
+            <td width="590">
+                <p>Als QS-Mitarbeiter m&ouml;chte ich in jedem Messschritt den aktuellen Messwert jedes eindeutig identifizierten Messmittels zur Verf&uuml;gung haben.</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="84">
+                <p>7</p>
+            </td>
+            <td width="590">
+                <p>Als QS-Mitarbeiter m&ouml;chte ich bei der Auswahl der Messmittel bei Programm-Start nur solche Messmittel angezeigt bekommen, die f&uuml;r die jeweilige Messung geeignet sind.</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="84">
+                <p>8</p>
+            </td>
+            <td width="590">
+                <p>Als QS-Mitarbeiter m&ouml;chte ich den Zugang zur Konfiguration der Messmittel zum Messrechner mit einem Passwort gesch&uuml;tzt haben, damit versehentliche oder unbefugte &Auml;nderungen ausgeschlossen werden k&ouml;nnen.</p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <h4>Productbacklog</h4>
+    <table class="table table-striped">
+        <tbody>
+        <tr>
+            <td width="85">
+                <p><strong>ID</strong><strong> User Story</strong></p>
+            </td>
+            <td width="68">
+                <p><strong>Priority</strong></p>
+            </td>
+            <td width="74">
+                <p><strong>Estimate</strong></p>
+            </td>
+            <td width="80">
+                <p><strong>Business Value</strong></p>
+            </td>
+            <td width="245">
+                <p><strong>Task</strong></p>
+            </td>
+            <td width="55">
+                <p><strong>Sprint</strong></p>
+            </td>
+            <td width="97">
+                <p><strong>Status</strong></p>
+            </td>
+        </tr>
+        <tr>
+            <td width="85">
+                <p>1</p>
+            </td>
+            <td width="68">
+                <p>1</p>
+            </td>
+            <td width="74">
+                <p>8</p>
+            </td>
+            <td width="80">
+                <p>20</p>
+            </td>
+            <td width="245">
+                <p>DeviceConfiguration.xml mit den Elementen ID, HostIP, Group und Protokoll im Root-Verzeichnis der Applikation erstellen.</p>
+            </td>
+            <td width="55">
+                <p>1</p>
+            </td>
+            <td width="97">
+                <p>in progress</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="85">
+                <p>1</p>
+            </td>
+            <td width="68">
+                <p>1</p>
+            </td>
+            <td width="74">
+                <p>20</p>
+            </td>
+            <td width="80">
+                <p>30</p>
+            </td>
+            <td width="245">
+                <p>GET Liste der ID's aller konfigurierten Messmittel gem&auml;ss DeviceConfiguration.xml in Json.</p>
+            </td>
+            <td width="55">
+                <p>1</p>
+            </td>
+            <td width="97">
+                <p>in progress</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="85">
+                <p>2</p>
+            </td>
+            <td width="68">
+                <p>1</p>
+            </td>
+            <td width="74">
+                <p>20</p>
+            </td>
+            <td width="80">
+                <p>30</p>
+            </td>
+            <td width="245">
+                <p>Startseite im Browser mit einer Liste aller bereits konfigurierten Messmittel und einem Formular zur Eingabe und Speicherung eines neuen Messmittels in Json erstellen.</p>
+            </td>
+            <td width="55">
+                <p>1</p>
+            </td>
+            <td width="97">
+                <p>in progress</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="85">
+                <p>2</p>
+            </td>
+            <td width="68">
+                <p>1</p>
+            </td>
+            <td width="74">
+                <p>13</p>
+            </td>
+            <td width="80">
+                <p>30</p>
+            </td>
+            <td width="245">
+                <p>POST Daten der Konfiguration eines neuen Messmittels einlesen und in DeviceConfiguration.json speichern.</p>
+            </td>
+            <td width="55">
+                <p>1</p>
+            </td>
+            <td width="97">
+                <p>in progress</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="85">
+                <p>6</p>
+            </td>
+            <td width="68">
+                <p>1</p>
+            </td>
+            <td width="74">
+                <p>13</p>
+            </td>
+            <td width="80">
+                <p>30</p>
+            </td>
+            <td width="245">
+                <p>GET mit ID gibt den aktuellen Messwert des Messmittels gemäss ID zur&uuml;ck.</p>
+            </td>
+            <td width="55">
+                <p>1</p>
+            </td>
+            <td width="97">
+                <p>in progress</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="85">
+                <p>6</p>
+            </td>
+            <td width="68">
+                <p>1</p>
+            </td>
+            <td width="74">
+                <p>8</p>
+            </td>
+            <td width="80">
+                <p>20</p>
+            </td>
+            <td width="245">
+                <p>DeviceValues.json als Mock zur Bereitstellung der Messdaten erstellen.</p>
+            </td>
+            <td width="55">
+                <p>1</p>
+            </td>
+            <td width="97">
+                <p>in progress</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="85">
+                <p>8</p>
+            </td>
+            <td width="68">
+                <p>2</p>
+            </td>
+            <td width="74">&nbsp;</td>
+            <td width="80">&nbsp;</td>
+            <td width="245">
+                <p>Speicherung der Konfiguration eines Messmittels mittels Passwort-Abfrage im Browser absichern.</p>
+            </td>
+            <td width="55">
+                <p>1</p>
+            </td>
+            <td width="97">
+                <p>open</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="85">
+                <p>2</p>
+            </td>
+            <td width="68">
+                <p>2</p>
+            </td>
+            <td width="74">&nbsp;</td>
+            <td width="80">&nbsp;</td>
+            <td width="245">
+                <p>GET mit Id um Messmittel aus der DeviceConfiguration.json zu löchen</p>
+            </td>
+            <td width="55">
+                <p>2</p>
+            </td>
+            <td width="97">
+                <p>open</p>
+            </td>
+        </tr>
+        <tr>
+            <td width="85">&nbsp;</td>
+            <td width="68">&nbsp;</td>
+            <td width="74">&nbsp;</td>
+            <td width="80">&nbsp;</td>
+            <td width="245">&nbsp;</td>
+            <td width="55">&nbsp;</td>
+            <td width="97">&nbsp;</td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+</div>
+
+
+</body>
+</html>
