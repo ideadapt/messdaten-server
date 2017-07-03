@@ -67,7 +67,7 @@ Folgende Schritte müssen zur Installation ausgeführt werden:
 * Aus der Konfigurations-Seite kann über die **Schaltfläche Simulation** die Messprogramm-Simulations-Seite geöffnet werden.
 
 * **MesswertErzeuger.exe starten**, die Checkboxen für device1 und device3 markieren und den Start-Button betätigen.
-    ![Screenshot](res/messwert_erzeuger.jpg)
+    ![Screenshot](rsc/messwert_erzeuger.jpg)
 
 * Der Messwert-Erzeuger schreibt Zufallswerte in die Datei DeviceValues.xml die in der Konfiguration als Data-Source definiert ist, und simuliert so die aktuellen Werte der Mess-Devices.
 
