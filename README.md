@@ -45,6 +45,8 @@ Folgende Schritte müssen zur Installation ausgeführt werden:
 
 * Verknüpfung **Messdaten-Server.url** aus Verzeichnis rsc auf den Desktop ziehen
 
+* **DeviceValuesTest.xml** aus dem Projekt-Verzeichnis rsc für die Unit-Tests lokal nach **C:\temp\\** kopieren
+
 
 ## Dienst starten
 
@@ -78,6 +80,13 @@ Folgende Schritte müssen zur Installation ausgeführt werden:
 * In der letzten Spalte wird symbolisch die Position der Z-Achse dargestellt, welche vermessen wird.
 
 * Bei Programm-Ende, Programm-Stopp, wenn keine aktuellen Messwert zur Verfügung stehen etc. werden entsprechende Meldungen ausgegeben.
+
+
+## Tests durchführen
+
+* Git-Bash im Root-Verzeichnis des Messdaten-servers öffnen
+
+* Mit dem Befehl **activator test** die Unit-Tests starten
 
 
 ## Entwicklungsteam
