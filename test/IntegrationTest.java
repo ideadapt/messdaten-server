@@ -1,24 +1,34 @@
 import org.junit.*;
-
-import play.mvc.*;
-import play.test.*;
-
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 
-import static org.fluentlenium.core.filter.FilterConstructor.*;
 
 public class IntegrationTest {
 
-    /**
-     * add your integration test here
-     * in this example we just check if the welcome page is being shown
-     */
+
+     //integration test
+     //prüft ob device-list (list, update and delete) page geladen wird
     @Test
-    public void test() {
-        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
-            browser.goTo("http://localhost:3333");
-            assertTrue(browser.pageSource().contains("Your new application is ready."));
+    public void testDeviceListPageReturnsTrue() {
+        running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
+            browser.goTo("http://localhost:9000/list");
+            assertTrue(browser.pageSource().contains("Device-Liste")); //erwarteter Inhalt "Device-Liste"
+        });
+    }
+
+    @Test
+    public void testDeviceUpdatePageReturnsTrue() {
+        running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
+            browser.goTo("http://localhost:9000/device/update/device1");
+            assertTrue(browser.pageSource().contains("update")); //erwarteter Inhalt "update"
+        });
+    }
+
+    @Test
+    public void testDeviceDeletePageReturnsTrue() {
+        running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
+            browser.goTo("http://localhost:9000/device/delete/device1");
+            assertTrue(browser.pageSource().contains("delete")); //erwarteter Inhalt "delete"
         });
     }
 
