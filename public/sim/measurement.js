@@ -309,8 +309,8 @@ function selectMessage(){
  * @param message
  */
 function showError(message) {
-    $("#error").html('<div class="text-center alert alert-danger"></div>');
-    $(".alert-danger").html(message);
+    $("#error").html('<div class="text-center alert alert-error"></div>');
+    $(".alert-error").html(message);
 }
 
 /**
