@@ -39,20 +39,20 @@ Folgende Schritte müssen zur Installation ausgeführt werden:
 
 * Git-Repository klonen von **https://github.com/ibwgr/messdaten-server.git**
 
-* **DeviceValues.xml** und **DeviceConfiguration.json** aus dem Projekt-Verzeichnis rsc lokal nach **C:\temp\\** kopieren
+* **DeviceValues.xml** und **DeviceConfiguration.json** aus dem Projekt-Verzeichnis rsc lokal nach **C:\temp\\** kopieren.
 
-* **MesswertErzeuger.zip** aus Verzeichnis rsc in ein beliebiges Verzeichnis als **MesswertErzeuger.exe** entpacken
+* **MesswertErzeuger.zip** aus Verzeichnis rsc in ein beliebiges Verzeichnis als **MesswertErzeuger.exe** entpacken.
 
-* Verknüpfung **Messdaten-Server.url** aus Verzeichnis rsc auf den Desktop ziehen
+* Verknüpfung **Messdaten-Server.url** aus Verzeichnis rsc auf den Desktop ziehen.
 
-* **DeviceValuesTest.xml** aus dem Projekt-Verzeichnis rsc für die Unit-Tests lokal nach **C:\temp\\** kopieren
+* **DeviceValuesTest.xml** aus dem Projekt-Verzeichnis rsc für die Unit-Tests lokal nach **C:\temp\\** kopieren.
 
 
 ## Dienst starten
 
-* Git-Bash im Root-Verzeichnis des Messdaten-servers öffnen
+* Git-Bash im Root-Verzeichnis des Messdaten-servers öffnen.
 
-* Mit dem Befehl **activator run** den Dienst starten
+* Mit dem Befehl **activator run** den Dienst starten.
 
 
 ## Konfigurations-Menue öffnen
@@ -61,7 +61,7 @@ Folgende Schritte müssen zur Installation ausgeführt werden:
 
 * In der Konfiguration können Devices hinzugefügt, geändert und gelöscht werden.
 
-* device1 und device3 nicht löschen, da diese für die Simulation gebraucht werden.
+* device1, device3 und deviceTest nicht löschen, da diese für die Simulation und die Unit-Tests gebraucht werden.
 
 
 ## Simulation starten
@@ -82,11 +82,11 @@ Folgende Schritte müssen zur Installation ausgeführt werden:
 * Bei Programm-Ende, Programm-Stopp, wenn keine aktuellen Messwert zur Verfügung stehen etc. werden entsprechende Meldungen ausgegeben.
 
 
-## Tests durchführen
+## Unit-Tests durchführen
 
-* Git-Bash im Root-Verzeichnis des Messdaten-servers öffnen
+* Git-Bash im Root-Verzeichnis des Messdaten-servers öffnen.
 
-* Mit dem Befehl **activator test** die Unit-Tests starten
+* Mit dem Befehl **activator test** die Unit-Tests starten.
 
 
 ## Entwicklungsteam
