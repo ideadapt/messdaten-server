@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DeviceList>
+  <Device>
+    <Id>deviceTest</Id>
+    <Value>2.217</Value>
+  </Device>
+  <Device>
+    <Id>device3</Id>
+    <Value>8.492</Value>
+  </Device>
+</DeviceList>
