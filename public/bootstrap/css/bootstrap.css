@@ -21,6 +21,10 @@ body {
     border-style: groove;
 }
 
+.own {
+    padding-bottom:50px;
+}
+
 .info {
     display: none;
 }
