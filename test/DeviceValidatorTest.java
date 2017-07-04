@@ -2,16 +2,14 @@ import model.Device;
 import org.junit.Before;
 import org.junit.Test;
 import services.DeviceValidator;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class DeviceValidatorTest {
 
-    //Testing DeviceValidator
+    //testet DeviceValidator
 
     private List<Device> devices;
 
@@ -23,6 +21,7 @@ public class DeviceValidatorTest {
         devices.add(new Device("device3", "192.230.25.26", "c:/temp/values.txt", "group1", "txt"));
     }
 
+    //new Device und update Device
     @Test
     public void validateDeviceWithValidDeviceReturnsTrue() {
         Device newDevice = new Device("device4", "192.230.25.26", "c:/temp/values.txt", "group3", "xml");

@@ -7,9 +7,9 @@ import play.mvc.Http.RequestBuilder;
 
 public class FunctionalTest {
 
-    //Testing Controller Action through Routing
+    //test Controller Action über Routing
     @Test
-    public void testBadRoute() {
+    public void testBadRouteReturnsTrue() {
         running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
             browser.goTo("http://localhost:9000");
             RequestBuilder request = new RequestBuilder()
@@ -22,7 +22,7 @@ public class FunctionalTest {
     }
 
     @Test
-    public void testGoodRoute() {
+    public void testGoodRouteReturnsTrue() {
         running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
             browser.goTo("http://localhost:9000");
             RequestBuilder request = new RequestBuilder()

@@ -1,17 +1,15 @@
 import org.junit.*;
-
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 
 
 public class IntegrationTest {
 
-    /**
-     * integration test
-     * just check if the device-liste (list, update and delete) page is being shown
-     */
+
+     //integration test
+     //prüft ob device-list (list, update and delete) page geladen wird
     @Test
-    public void testDeviceListPage() {
+    public void testDeviceListPageReturnsTrue() {
         running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
             browser.goTo("http://localhost:9000/list");
             assertTrue(browser.pageSource().contains("Device-Liste")); //erwarteter Inhalt "Device-Liste"
@@ -19,7 +17,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testDeviceUpdatePage() {
+    public void testDeviceUpdatePageReturnsTrue() {
         running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
             browser.goTo("http://localhost:9000/device/update/device1");
             assertTrue(browser.pageSource().contains("update")); //erwarteter Inhalt "update"
@@ -27,7 +25,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testDeviceDeletePage() {
+    public void testDeviceDeletePageReturnsTrue() {
         running(testServer(9000, fakeApplication(inMemoryDatabase())), HTMLUNIT, browser -> {
             browser.goTo("http://localhost:9000/device/delete/device1");
             assertTrue(browser.pageSource().contains("delete")); //erwarteter Inhalt "delete"
