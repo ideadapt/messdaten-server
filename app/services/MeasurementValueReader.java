@@ -50,60 +50,61 @@ public class MeasurementValueReader {
     }
 
     /**
-     * Gibt einen Messwert mit Zeitstempel in Form einer Instanz von MeasurementValueXml zurueck,
-     * wenn das Protokoll xml-1 konfiguriert wurde.
-     *
-     * Wirft im Fehlerfall eine ReadWriteException
+     * Gibt einen Messwert mit Zeitstempel in Form einer Instanz von MeasurementValueXml zurueck.
      *
      * @param deviceName
-     * @return
+     * @return MeasurementValueXml
      * @throws ReadWriteException
      */
     public static MeasurementValueXml getActualValueFromXml(String deviceName)throws ReadWriteException{
-        MeasurementValueXml measurementValue = new MeasurementValueXml();
-        // Pfad der Messwerte-Files gemaess deviceName aus der Konfiguration lesen und ein File erstellen
+        File xmlFile = getMeasurementFile(deviceName);
+        NodeList nList = getDeviceNodes(xmlFile);
+        return extractMeasurementValue(deviceName, xmlFile, nList);
+    }
+
+    private static File getMeasurementFile(String deviceName) {
         String path = DeviceMapperJson.getMeasurementValuePath(deviceName);
-        File xmlFile = null;
+        File xmlFile;
         if(path != null){
             xmlFile = new File(path);
         }else{
             throw  new ReadWriteException("Path for DataSource from " + deviceName + " not found in configuration");
         }
+        return xmlFile;
+    }
 
+    private static MeasurementValueXml extractMeasurementValue(String deviceName, File xmlFile, NodeList nList) {
+        MeasurementValueXml measurementValue = new MeasurementValueXml();
+        for (int i = 0; i < nList.getLength(); i++) {
+            Node nNode = nList.item(i);
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element eElement = (Element) nNode;
+                String deviceId = eElement.getElementsByTagName("Id").item(0).getTextContent();
+                if (deviceId.equals(deviceName)) {
+                    measurementValue.setId(deviceId);
+                    measurementValue.setValue(eElement.getElementsByTagName("Value").item(0).getTextContent());
+                    measurementValue.setTime(xmlFile.lastModified());
+                    break;
+                }
+            }
+        }
+        return measurementValue;
+    }
 
+    private static NodeList getDeviceNodes(File xmlFile) {
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(xmlFile);
             doc.getDocumentElement().normalize();
-            NodeList nList = doc.getElementsByTagName("Device");
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Node nNode = nList.item(i);
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-                    String deviceId = eElement.getElementsByTagName("Id").item(0).getTextContent();
-                    //Suchbegriff mit dem Wert des aktuellen Elements vergleichen
-                    if(deviceId.equals(deviceName)){
-                        // Messwert erstellen aus Xml-File
-                        measurementValue.setId(deviceId);
-                        measurementValue.setValue(eElement.getElementsByTagName("Value").item(0).getTextContent());
-                        measurementValue.setTime(xmlFile.lastModified());
-                        break;
-                    }
-                }
-            }
+            return doc.getElementsByTagName("Device");
         } catch (ParserConfigurationException e) {
-            throw new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
+            throw new ReadWriteException("Fehler beim Lesen von " + xmlFile.getAbsolutePath() + "\n" + e.getMessage());
         } catch (SAXException e) {
-            throw new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
+            throw new ReadWriteException("Fehler beim Lesen von " + xmlFile.getAbsolutePath() + "\n" + e.getMessage());
         } catch (IOException e) {
-            throw  new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
+            throw new ReadWriteException("Fehler beim Lesen von " + xmlFile.getAbsolutePath() + "\n" + e.getMessage());
         }
-        if(measurementValue == null){
-            throw  new ReadWriteException("Der Name " + deviceName + " wurde in " + path +" nicht gefunden");
-        }
-        return measurementValue;
     }
 
     /**
