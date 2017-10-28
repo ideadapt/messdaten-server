@@ -6,7 +6,6 @@ package model;
  * Created by Nett on 04.06.2017.
  */
 public class MeasurementValueXml {
-
     String id = "";
     String value = "";
     long time = 0;
@@ -36,5 +35,12 @@ public class MeasurementValueXml {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    /*
+    * Bei Abbruch des Bluetooth-Signals der Messuhr wird NaN (Not_A_Number) als Messwert eingelesen
+    */
+    public Boolean isNaN() {
+        return value.equals("NaN");
     }
 }

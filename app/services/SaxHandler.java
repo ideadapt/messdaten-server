@@ -25,8 +25,7 @@ public class SaxHandler extends DefaultHandler {
     private MeasurementValueXml actualValue = null;
 
     @Override
-    public void startElement(String uri, String localName, String qName,
-                             Attributes attributes){
+    public void startElement(String uri, String localName, String qName, Attributes attributes){
 
         if(qName.equals("ChannelResult")){
             actualValue = new MeasurementValueXml();
@@ -44,8 +43,7 @@ public class SaxHandler extends DefaultHandler {
     }
 
     @Override
-    public void endElement(String uri, String localName,
-                           String qName) {
+    public void endElement(String uri, String localName, String qName) {
         if(qName.equals("ChannelResult")){
             if((actualValue.getId() != "") && (actualValue.getValue() != "") && actualValue.getTime() > 0){
                 measurementValues.add(actualValue);
@@ -69,7 +67,7 @@ public class SaxHandler extends DefaultHandler {
             String formatTime = actualTime.replace("T", " ");
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = null;
+            Date date;
             try {
                 date = simpleDateFormat.parse(formatTime);
                 actualValue.setTime(date.getTime());

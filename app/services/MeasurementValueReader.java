@@ -46,7 +46,7 @@ public class MeasurementValueReader {
               case "txt-1":
                   return getActualValueFromTxt(deviceId);
               case "xml-2":
-                  return getActualValueFromXmlSax(deviceId);
+                  return getActualValueFromXmlSax(deviceId, path);
               default:
                   throw new IllegalArgumentException("Unsupported protocol: " + protocol);
           }
@@ -99,63 +99,49 @@ public class MeasurementValueReader {
         return doc;
     }
 
-    /**
-     * Gibt einen Messwert mit Zeitstempel in Form einer Instanz von MeasurementValueXml zurueck,
-     * wenn das Protokoll xml-2 konfiguriert wurde.
-     *
-     * Wirft im Fehlerfall eine ReadWriteException
-     *
-     * @param deviceId
-     * @return
-     * @throws ReadWriteException
-     */
-    public static MeasurementValueXml getActualValueFromXmlSax(String deviceId)throws ReadWriteException {
+    public static MeasurementValueXml getActualValueFromXmlSax(String deviceId, String path)throws ReadWriteException {
+        ArrayList<MeasurementValueXml> measurementValues = extractMeasurementValues(path);
+        MeasurementValueXml actualValue = findNewest(measurementValues);
+        if(actualValue.isNaN()){
+            throw new ReadWriteException("Kein gültiger Messwert in " + path +" für " + deviceId + " gefunden");
+        }
+        return actualValue;
+    }
 
-        // Pfad der Messwerte-Files gemaess deviceId aus der Konfiguration lesen und ein File erstellen
-        String path = DeviceMapperJson.getMeasurementValuePath(deviceId);
-        long time = 0;
-        MeasurementValueXml actualValue = null;
+    private static MeasurementValueXml findNewest(ArrayList<MeasurementValueXml> measurementValues) {
+      long time = 0;
+      MeasurementValueXml actualValue = null;
+      for (MeasurementValueXml value : measurementValues){
+          if(value.getTime() > time){
+              actualValue = value;
+              time = value.getTime();
+          }
+      }
+      return actualValue;
+    }
+
+    private static ArrayList<MeasurementValueXml> extractMeasurementValues(String path) {
         SaxHandler handler = new SaxHandler();
         SAXParserFactory factory = SAXParserFactory.newInstance();
-        ArrayList<MeasurementValueXml> measurementValues = (ArrayList<MeasurementValueXml>) handler.getMeasurementValues();
         try {
             SAXParser saxParser = factory.newSAXParser();
             saxParser.parse(
                     new SequenceInputStream(
                             Collections.enumeration(Arrays.asList(
-                                    new InputStream[] {
-                                            new ByteArrayInputStream("<ChannelResult>".getBytes()),
-                                            new FileInputStream(path),
-                                            new ByteArrayInputStream("</ChannelResult>".getBytes()),
-                                    }))
+                                    new ByteArrayInputStream("<ChannelResult>".getBytes()),
+                                    new FileInputStream(path),
+                                    new ByteArrayInputStream("</ChannelResult>".getBytes())))
                     ), handler);
-        } catch (ParserConfigurationException e) {
-            throw new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
-        } catch (SAXException e) {
-            throw new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
-        } catch (FileNotFoundException e) {
-            throw new ReadWriteException("Datei konnte nicht gefunden werden " + path + "\n" + e.getMessage());
-        } catch (IOException e) {
-            throw new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            throw new ReadWriteException("Fehler beim parsen von " + path, e);
         }
 
-        // Aktuellster Messwert zuweisen
-        for (MeasurementValueXml value : measurementValues){
-            if(value.getTime() > time){
-                actualValue = value;
-                time = value.getTime();
-            }
+        if(handler.getMeasurementValues().isEmpty()){
+          throw new ReadWriteException("Keine Messwerte gefunden in " + path);
         }
-        if(actualValue == null){
-            throw  new ReadWriteException("Der Name " + deviceId + " wurde in " + path +" nicht gefunden");
-        }
-        //Bei Abbruch des Bluetooth-Signals der Messuhr wird NaN (Not_A_Number) als Messwert eingelesen
-        if(actualValue.getValue().equals("NaN")){
-            throw  new ReadWriteException("Kein gültiger Messwert in " + path +" für " + deviceId + " gefunden");
-        }
-        return actualValue;
+
+        return (ArrayList<MeasurementValueXml>) handler.getMeasurementValues();
     }
-
 
     /**
      * Gibt einen Messwert mit Zeitstempel in Form einer Instanz von MeasurementValueXml zurueck,
