@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import javax.xml.parsers.*;
 import java.io.*;
@@ -36,55 +37,51 @@ public class MeasurementValueReader {
      * @throws ReadWriteException
      */
     public static MeasurementValueXml getActualValue(String deviceId) throws ReadWriteException{
-
         String protocol = DeviceMapperJson.getMeasurementValueProtocol(deviceId);
-        switch (protocol){
-
-            case "xml-1":
-                return getActualValueFromXml(deviceId);
-            case "txt-1":
-                return getActualValueFromTxt(deviceId);
-            case "xml-2":
-                return getActualValueFromXmlSax(deviceId);
-            default:
-                throw new ReadWriteException("Not possible to read protocol-type: " + protocol);
+        String path = DeviceMapperJson.getMeasurementValuePath(deviceId);
+        try{
+          switch (protocol){
+              case "xml-1":
+                  return getActualValueFromXml(deviceId, path);
+              case "txt-1":
+                  return getActualValueFromTxt(deviceId);
+              case "xml-2":
+                  return getActualValueFromXmlSax(deviceId);
+              default:
+                  throw new IllegalArgumentException("Unsupported protocol: " + protocol);
+          }
+        }catch(ReadWriteException | IllegalArgumentException e){
+          throw new ReadWriteException("Fehler beim Lesen von Messwert für " + deviceId + " in " + path, e);
         }
     }
 
-    /**
-     * Gibt einen Messwert mit Zeitstempel in Form einer Instanz von MeasurementValueXml zurueck.
-     *
-     * @param deviceId
-     * @return MeasurementValueXml
-     * @throws ReadWriteException
-     */
-    private static MeasurementValueXml getActualValueFromXml(String deviceId) throws ReadWriteException{
-        File xmlFile = getMeasurementFileOfDevice(deviceId);
+    private static MeasurementValueXml getActualValueFromXml(String deviceId, String path) throws ReadWriteException {
+        File xmlFile = new File(path);
         Document doc = createXmlDocument(xmlFile);
-
         NodeList nodeList = doc.getElementsByTagName(DEVICE_TAG_NAME);
-        MeasurementValueXml measurementValue = null;
+        String value = findValue(deviceId, nodeList);
 
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-                String xmlDeviceId = element.getElementsByTagName(ID_TAG_NAME).item(0).getTextContent();
-                if(xmlDeviceId.equals(deviceId)){
-                    String value = element.getElementsByTagName(VALUE_TAG_NAME).item(0).getTextContent();
-                    measurementValue = new MeasurementValueXml();
-                    measurementValue.setId(xmlDeviceId);
-                    measurementValue.setValue(value);
-                    measurementValue.setTime(xmlFile.lastModified());
-                    break;
-                }
-            }
-        }
+        MeasurementValueXml measurementValue = new MeasurementValueXml();
+        measurementValue.setId(deviceId);
+        measurementValue.setTime(xmlFile.lastModified());
+        measurementValue.setValue(value);
 
-        if(measurementValue == null){
-            throw new ReadWriteException("Die Id " + deviceId + " wurde in " + xmlFile.getAbsolutePath() +" nicht gefunden");
-        }
         return measurementValue;
+    }
+
+    private static String findValue(String deviceId, NodeList nodeList) throws ReadWriteException {
+      for (int i = 0; i < nodeList.getLength(); i++) {
+          Node node = nodeList.item(i);
+          if (node.getNodeType() == Node.ELEMENT_NODE) {
+              Element element = (Element) node;
+              String xmlDeviceId = element.getElementsByTagName(ID_TAG_NAME).item(0).getTextContent();
+              if(xmlDeviceId.equals(deviceId)){
+                  return element.getElementsByTagName(VALUE_TAG_NAME).item(0).getTextContent();
+              }
+          }
+      }
+
+      throw new ReadWriteException("Id " + deviceId + " nicht gefunden.");
     }
 
     private static Document createXmlDocument(File xmlFile) {
@@ -100,17 +97,6 @@ public class MeasurementValueReader {
 
         doc.getDocumentElement().normalize();
         return doc;
-    }
-
-    private static File getMeasurementFileOfDevice(String deviceId) {
-        String path = DeviceMapperJson.getMeasurementValuePath(deviceId);
-        File xmlFile;
-        if(path != null){
-            xmlFile = new File(path);
-        }else{
-            throw new ReadWriteException("Path for DataSource from " + deviceId + " not found in configuration");
-        }
-        return xmlFile;
     }
 
     /**
