@@ -12,4 +12,8 @@ public class ReadWriteException extends RuntimeException{
     public ReadWriteException(String message) {
         super(message);
     }
+
+    public ReadWriteException(String message, Exception exception) {
+        super(message, exception);
+    }
 }
