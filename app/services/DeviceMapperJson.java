@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class DeviceMapperJson {
 
-    private static final String CONFIGPATH = "c:\\temp\\DeviceConfiguration.json";
+    private static final String CONFIGPATH = "/Users/ueli/repos/messdaten-server/rsc/DeviceConfiguration.json";
 
     /**
      * Mapped DeviceConfiguration.json nach List<Device>devices und gibt diese Liste zurueck
@@ -165,12 +165,12 @@ public class DeviceMapperJson {
     }
 
     /**
-     * Gibt den Pfad der Data-Source des gesuchen Devices gemaess Konfiguration zurueck
+     * Gibt den Pfad der Data-Source des gesuchetn Devices gemäss Konfiguration zurück
      *
      * @param deviceName
      * @return
      */
-    public static  String getMeasurementValuePath(String deviceName){
+    public static String getMeasurementValuePath(String deviceName){
         List<Device>devices = getDeviceListFromConfig();
 
         for(Device device : devices){
@@ -178,7 +178,7 @@ public class DeviceMapperJson {
                 return device.getDataSource();
             }
         }
-        return null;
+        throw new ReadWriteException("Datasource for " + deviceName + " not found");
     }
 
     /**
@@ -195,6 +195,6 @@ public class DeviceMapperJson {
                 return device.getProtocol();
             }
         }
-        return null;
+        throw new ReadWriteException("Protocol for " + deviceName + " not found");
     }
 }
