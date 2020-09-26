@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class DeviceMapperJson {
 
-    private static final String CONFIGPATH = "c:\\temp\\DeviceConfiguration.json";
+    private static final String CONFIGPATH = DeviceMapperJson.class.getClassLoader().getResource("rsc/DeviceConfiguration.json").getFile();
 
     /**
      * Mapped DeviceConfiguration.json nach List<Device>devices und gibt diese Liste zurueck
@@ -108,7 +108,7 @@ public class DeviceMapperJson {
      */
     public static JsonNode getJsonNode() throws ReadWriteException{
 
-        File file = new File( CONFIGPATH);
+        File file = new File(CONFIGPATH);
         JsonNode devicesJson = null;
         try {
             FileInputStream is =new FileInputStream(file);
