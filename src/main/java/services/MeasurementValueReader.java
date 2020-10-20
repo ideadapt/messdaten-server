@@ -7,20 +7,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.SequenceInputStream;
+import javax.xml.parsers.*;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,21 +17,9 @@ import java.util.Collections;
 import java.util.Date;
 
 
-/**
- * Die Klasse dient als Schnittstelle zur Datenhaltung der Messwerte.
- * Je nach konfiguriertem Protokoll wird die entsprechende Methode aufgerufen.
- *
- * Created by Nett on 04.06.2017.
- */
 public class MeasurementValueReader {
 
 
-    /**
-     * Dient als Weiche um die, gemaess Protokoll des Devices, passende Methode aufzurufen.
-     *
-     * @param deviceName
-     * @return
-     */
     public static MeasurementValueXml getActualValue(String deviceName) {
 
         try {
@@ -71,11 +47,7 @@ public class MeasurementValueReader {
         }
     }
 
-    /**
 
-     * @param deviceName
-     * @return
-     */
     private static MeasurementValueXml getActualValueFromXml(String deviceName) throws ReadWriteException, ParserConfigurationException, SAXException, IOException{
         MeasurementValueXml measurementValue = new MeasurementValueXml();
         String path = DeviceMapperJson.getMeasurementValuePath(deviceName);
@@ -105,10 +77,6 @@ public class MeasurementValueReader {
         return measurementValue;
     }
 
-    /**
-     * @param deviceName
-     * @return
-     */
 
     private static MeasurementValueXml getActualValueFromXmlSax(String deviceName) throws ReadWriteException, ParserConfigurationException, SAXException, IOException {
 
@@ -137,11 +105,6 @@ public class MeasurementValueReader {
         return actualValue;
     }
 
-
-    /**
-     * @param deviceName
-     * @return
-     */
 
     private static MeasurementValueXml getActualValueFromTxt(String deviceName) throws ReadWriteException, ParseException, IOException {
 
