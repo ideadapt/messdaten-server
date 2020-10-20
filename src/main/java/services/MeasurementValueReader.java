@@ -48,6 +48,7 @@ public class MeasurementValueReader {
 
         try {
             String protocol = DeviceMapperJson.getMeasurementValueProtocol(deviceName);
+
             assert protocol != null;
             switch (protocol){
 
@@ -61,11 +62,13 @@ public class MeasurementValueReader {
                     throw new ReadWriteException("Not possible to read protocol-type: " + protocol);
             }
 
-        }catch (ParserConfigurationException | SAXException | IOException e) {
+        }catch (ParserConfigurationException | IOException | SAXException e) {
             throw new ReadWriteException("Fehler beim Lesen von " /*+ path*/ + "\n" + e.getMessage());
-        } catch (ParseException e) {throw new ReadWriteException("Fehler xy");
+        } catch (ParseException e) {
+            throw new ReadWriteException("Der Name "  + deviceName + " wurde nicht gefunden");
+        }catch (NumberFormatException e) {
+            throw new ReadWriteException("Kein gültiger Messwert für " + deviceName + " gefunden");
         }
-
     }
 
     /**
@@ -76,9 +79,8 @@ public class MeasurementValueReader {
     private static MeasurementValueXml getActualValueFromXml(String deviceName) throws ReadWriteException, ParserConfigurationException, SAXException, IOException{
         MeasurementValueXml measurementValue = new MeasurementValueXml();
         String path = DeviceMapperJson.getMeasurementValuePath(deviceName);
-        InputStream xmlFile;
         assert path != null;
-        xmlFile = MeasurementValueReader.class.getResourceAsStream(path);
+        InputStream xmlFile = MeasurementValueReader.class.getResourceAsStream(path);
 
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 
@@ -143,23 +145,20 @@ public class MeasurementValueReader {
 
     private static MeasurementValueXml getActualValueFromTxt(String deviceName) throws ReadWriteException, ParseException, IOException {
 
-        FileInputStream in;
-        BufferedReader br;
         String strLine = null;
         String line;
-        String lastLine;
         MeasurementValueXml measurementValue = new MeasurementValueXml();
         String path = DeviceMapperJson.getMeasurementValuePath(deviceName);
 
             assert path != null;
-            in = new FileInputStream(path);
-            br = new BufferedReader(new InputStreamReader(in));
+            FileInputStream in = new FileInputStream(path);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
             while ((line = br.readLine()) != null)
             {
                 strLine = line;
             }
-            lastLine = strLine;
+            String lastLine = strLine;
 
             System.out.println(lastLine);
             in.close();
@@ -171,10 +170,8 @@ public class MeasurementValueReader {
         tokens[2].split(" ");
 
         String pattern = "dd.MM.yyyy HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date date;
 
-        date = simpleDateFormat.parse(tokens[2]);
+        Date date = new SimpleDateFormat(pattern).parse(tokens[2]);
 
         assert date != null;
         measurementValue.setTime(date.getTime());
