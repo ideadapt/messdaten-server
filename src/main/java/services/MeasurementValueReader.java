@@ -39,51 +39,49 @@ public class MeasurementValueReader {
 
 
     /**
-     * Dient als Weiche um die, gemaess Prokoll des Devices, passende Methode aufzurufen.
+     * Dient als Weiche um die, gemaess Protokoll des Devices, passende Methode aufzurufen.
      *
      * @param deviceName
      * @return
-     * @throws ReadWriteException
      */
-    public static MeasurementValueXml getActualValue(String deviceName)throws ReadWriteException{
+    public static MeasurementValueXml getActualValue(String deviceName) {
 
-        String protocol = DeviceMapperJson.getMeasurementValueProtocol(deviceName);
-        switch (protocol){
+        try {
+            String protocol = DeviceMapperJson.getMeasurementValueProtocol(deviceName);
+            assert protocol != null;
+            switch (protocol){
 
-            case "xml-1":
-                return getActualValueFromXml(deviceName);
-            case "txt-1":
-                return getActualValueFromTxt(deviceName);
-            case "xml-2":
-                return getActualValueFromXmlSax(deviceName);
-            default:
-                throw new ReadWriteException("Not possible to read protocol-type: " + protocol);
+                case "xml-1":
+                    return getActualValueFromXml(deviceName);
+                case "txt-1":
+                    return getActualValueFromTxt(deviceName);
+                case "xml-2":
+                    return getActualValueFromXmlSax(deviceName);
+                default:
+                    throw new ReadWriteException("Not possible to read protocol-type: " + protocol);
+            }
+
+        }catch (ParserConfigurationException | SAXException | IOException e) {
+            throw new ReadWriteException("Fehler beim Lesen von " /*+ path*/ + "\n" + e.getMessage());
+        } catch (ParseException e) {throw new ReadWriteException("Fehler xy");
         }
+
     }
 
     /**
-     * Gibt einen Messwert mit Zeitstempel in Form einer Instanz von MeasurementValueXml zurueck,
-     * wenn das Protokoll xml-1 konfiguriert wurde.
-     *
-     * Wirft im Fehlerfall eine ReadWriteException
-     *
+
      * @param deviceName
      * @return
-     * @throws ReadWriteException
      */
-    public static MeasurementValueXml getActualValueFromXml(String deviceName)throws ReadWriteException{
+    private static MeasurementValueXml getActualValueFromXml(String deviceName) throws ReadWriteException, ParserConfigurationException, SAXException, IOException{
         MeasurementValueXml measurementValue = new MeasurementValueXml();
-        // Pfad der Messwerte-Files gemaess deviceName aus der Konfiguration lesen und ein File erstellen
         String path = DeviceMapperJson.getMeasurementValuePath(deviceName);
         InputStream xmlFile;
-        if(path != null){
-            xmlFile = MeasurementValueReader.class.getResourceAsStream(path);
-        }else{
-            throw  new ReadWriteException("Path for DataSource from " + deviceName + " not found in configuration");
-        }
+        assert path != null;
+        xmlFile = MeasurementValueReader.class.getResourceAsStream(path);
 
         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-        try {
+
             DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
             Document doc = docBuilder.parse(xmlFile);
             doc.getDocumentElement().normalize();
@@ -94,9 +92,7 @@ public class MeasurementValueReader {
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
                     String deviceId = eElement.getElementsByTagName("Id").item(0).getTextContent();
-                    //Suchbegriff mit dem Wert des aktuellen Elements vergleichen
                     if(deviceId.equals(deviceName)){
-                        // Messwert erstellen aus Xml-File
                         measurementValue.setId(deviceId);
                         measurementValue.setValue(eElement.getElementsByTagName("Value").item(0).getTextContent());
                         measurementValue.setTime(new File(path).lastModified());
@@ -104,99 +100,58 @@ public class MeasurementValueReader {
                     }
                 }
             }
-        } catch (ParserConfigurationException e) {
-            throw new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
-        } catch (SAXException e) {
-            throw new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
-        } catch (IOException e) {
-            throw  new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
-        }
-        if(measurementValue == null){
-            throw  new ReadWriteException("Der Name " + deviceName + " wurde in " + path +" nicht gefunden");
-        }
         return measurementValue;
     }
 
     /**
-     * Gibt einen Messwert mit Zeitstempel in Form einer Instanz von MeasurementValueXml zurueck,
-     * wenn das Protokoll xml-2 konfiguriert wurde.
-     *
-     * Wirft im Fehlerfall eine ReadWriteException
-     *
      * @param deviceName
      * @return
-     * @throws ReadWriteException
      */
-    public static MeasurementValueXml getActualValueFromXmlSax(String deviceName)throws ReadWriteException {
 
-        // Pfad der Messwerte-Files gemaess deviceName aus der Konfiguration lesen und ein File erstellen
+    private static MeasurementValueXml getActualValueFromXmlSax(String deviceName) throws ReadWriteException, ParserConfigurationException, SAXException, IOException {
+
         String path = DeviceMapperJson.getMeasurementValuePath(deviceName);
         long time = 0;
         MeasurementValueXml actualValue = null;
         SaxHandler handler = new SaxHandler();
         SAXParserFactory factory = SAXParserFactory.newInstance();
         ArrayList<MeasurementValueXml> measurementValues = (ArrayList<MeasurementValueXml>) handler.getMeasurementValues();
-        try {
             SAXParser saxParser = factory.newSAXParser();
+            assert path != null;
             saxParser.parse(
                     new SequenceInputStream(
                             Collections.enumeration(Arrays.asList(
-                                    new InputStream[] {
-                                            new ByteArrayInputStream("<ChannelResult>".getBytes()),
-                                            new FileInputStream(path),
-                                            new ByteArrayInputStream("</ChannelResult>".getBytes()),
-                                    }))
+                                    new ByteArrayInputStream("<ChannelResult>".getBytes()),
+                                    new FileInputStream(path),
+                                    new ByteArrayInputStream("</ChannelResult>".getBytes())))
                     ), handler);
-        } catch (ParserConfigurationException e) {
-            throw new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
-        } catch (SAXException e) {
-            throw new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
-        } catch (FileNotFoundException e) {
-            throw new ReadWriteException("Datei konnte nicht gefunden werden " + path + "\n" + e.getMessage());
-        } catch (IOException e) {
-            throw new ReadWriteException("Fehler beim Lesen von " + path + "\n" + e.getMessage());
-        }
 
-        // Aktuellster Messwert zuweisen
         for (MeasurementValueXml value : measurementValues){
             if(value.getTime() > time){
                 actualValue = value;
                 time = value.getTime();
             }
         }
-        if(actualValue == null){
-            throw  new ReadWriteException("Der Name " + deviceName + " wurde in " + path +" nicht gefunden");
-        }
-        //Bei Abbruch des Bluetooth-Signals der Messuhr wird NaN (Not_A_Number) als Messwert eingelesen
-        if(actualValue.getValue().equals("NaN")){
-            throw  new ReadWriteException("Kein gültiger Messwert in " + path +" für " + deviceName + " gefunden");
-        }
         return actualValue;
     }
 
 
     /**
-     * Gibt einen Messwert mit Zeitstempel in Form einer Instanz von MeasurementValueXml zurueck,
-     * wenn das Protokoll txt-1 konfiguriert wurde.
-     *
-     * Wirft im Fehlerfall eine ReadWriteException
-     *
      * @param deviceName
      * @return
-     * @throws ReadWriteException
      */
-    public static MeasurementValueXml getActualValueFromTxt(String deviceName)throws ReadWriteException{
 
-        FileInputStream in = null;
-        BufferedReader br = null;
+    private static MeasurementValueXml getActualValueFromTxt(String deviceName) throws ReadWriteException, ParseException, IOException {
+
+        FileInputStream in;
+        BufferedReader br;
         String strLine = null;
-        String line = null;
-        String lastLine = null;
+        String line;
+        String lastLine;
         MeasurementValueXml measurementValue = new MeasurementValueXml();
-        // Pfad der Messwerte-Files gemaess deviceName aus der Konfiguration lesen und ein File erstellen
         String path = DeviceMapperJson.getMeasurementValuePath(deviceName);
 
-        try {
+            assert path != null;
             in = new FileInputStream(path);
             br = new BufferedReader(new InputStreamReader(in));
 
@@ -209,12 +164,7 @@ public class MeasurementValueReader {
             System.out.println(lastLine);
             in.close();
 
-        } catch (FileNotFoundException ex) {
-            throw  new ReadWriteException(ex.getMessage());
-        } catch (IOException ex) {
-            throw  new ReadWriteException(ex.getMessage());
-        }
-
+        assert lastLine != null;
         String[] tokens = lastLine.split(";");
         measurementValue.setId(tokens[0]);
         measurementValue.setValue(tokens[1]);
@@ -222,16 +172,13 @@ public class MeasurementValueReader {
 
         String pattern = "dd.MM.yyyy HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date date = null;
+        Date date;
 
-        try {
-            date = simpleDateFormat.parse(tokens[2]);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        date = simpleDateFormat.parse(tokens[2]);
+
+        assert date != null;
         measurementValue.setTime(date.getTime());
 
         return measurementValue;
     }
-
 }
