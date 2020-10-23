@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class DeviceMapperJson {
 
-    private static final String CONFIGPATH = DeviceMapperJson.class.getResource("/rsc/DeviceConfiguration.json").getFile();
+    private static final String CONFIGPATH = DeviceMapperJson.class.getResource("/rsc/DeviceConfiguration.json").getFile().replaceAll("%20", " ");
 
     /**
      * Mapped DeviceConfiguration.json nach List<Device>devices und gibt diese Liste zurueck
