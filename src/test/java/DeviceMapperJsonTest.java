@@ -2,6 +2,8 @@
 import org.junit.jupiter.api.Test;
 import services.DeviceMapperJson;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -18,8 +20,8 @@ public class DeviceMapperJsonTest {
 
     @Test
     public void getMeasurementValueProtocolWithValidDeviceNameReturnsTrue() {
-        String  protocol = DeviceMapperJson.getMeasurementValueProtocol("deviceTest");
+        Optional<String> protocol = DeviceMapperJson.getMeasurementValueProtocol("deviceTest");
 
-        assertEquals("xml-1", protocol);
+        assertEquals("xml-1", protocol.get());
     }
 }

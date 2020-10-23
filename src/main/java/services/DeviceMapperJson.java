@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Nett on 27.05.2017.
@@ -187,14 +188,14 @@ public class DeviceMapperJson {
      * @param deviceName
      * @return
      */
-    public static  String getMeasurementValueProtocol(String deviceName){
-        List<Device>devices = getDeviceListFromConfig();
+    public static Optional<String> getMeasurementValueProtocol(String deviceName) {
+        List<Device> devices = getDeviceListFromConfig();
 
-        for(Device device : devices){
-            if(device.getName().equals(deviceName)){
-                return device.getProtocol();
+        for (Device device : devices) {
+            if (device.getName().equals(deviceName)) {
+                return Optional.of(device.getProtocol());
             }
         }
-        return null;
+        return Optional.empty();
     }
 }
