@@ -21,6 +21,7 @@ public class Xml {
      */
     public static MeasurementValueXml getActualValue(String deviceName) {
         String path = DeviceMapperJson.getMeasurementValuePath(deviceName);
+        path = DeviceMapperJson.class.getResource(path).getFile().replaceAll("%20", " ");
         return getMeasurementValueXml(deviceName, path);
     }
 
