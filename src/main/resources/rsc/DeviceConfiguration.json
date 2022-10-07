@@ -35,9 +35,9 @@
     "protocol": "text-1"
   },
   {
-    "name": "SY289",
+    "name": "deviceSaxTest",
     "hostIp": "136.230.66.20",
-    "dataSource": "C:/ProgramData/Sylvac/Sylcom/Export/temp/SY289_data.xml",
+    "dataSource": "/rsc/DeviceValuesSaxTest.xml",
     "group": "5",
     "protocol": "xml-2"
   },

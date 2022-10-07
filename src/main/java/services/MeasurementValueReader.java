@@ -131,6 +131,7 @@ public class MeasurementValueReader {
 
         // Pfad der Messwerte-Files gemaess deviceName aus der Konfiguration lesen und ein File erstellen
         String path = DeviceMapperJson.getMeasurementValuePath(deviceName);
+        InputStream xmlFile = MeasurementValueReader.class.getResourceAsStream(path);
         long time = 0;
         MeasurementValueXml actualValue = null;
         SaxHandler handler = new SaxHandler();
@@ -143,7 +144,7 @@ public class MeasurementValueReader {
                             Collections.enumeration(Arrays.asList(
                                     new InputStream[] {
                                             new ByteArrayInputStream("<ChannelResult>".getBytes()),
-                                            new FileInputStream(path),
+                                            xmlFile,
                                             new ByteArrayInputStream("</ChannelResult>".getBytes()),
                                     }))
                     ), handler);

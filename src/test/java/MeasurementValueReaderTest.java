@@ -10,9 +10,16 @@ public class MeasurementValueReaderTest {
     //testet test.java.MeasurementValueReaderTest - Messwert aus Test-xml auslesen
 
     @Test
-    public void getActualValueWithValidDeviceNameReturnsTrue() {
+    public void getActualValueWithValidDeviceXmlNameReturnsTrue() {
         MeasurementValueXml value = MeasurementValueReader.getActualValue("deviceTest");
 
         assertEquals("2.217", value.getValue());
+    }
+
+    @Test
+    public void getActualValueWithValidDeviceSaxNameReturnsTrue() {
+        MeasurementValueXml value = MeasurementValueReader.getActualValue("deviceSaxTest");
+
+        assertEquals("9.88", value.getValue());
     }
 }
